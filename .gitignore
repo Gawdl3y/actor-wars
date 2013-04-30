@@ -1,0 +1,6 @@
+# IntelliJ IDEA stuff
+.idea/
+*.iml
+
+# Compiled output
+out/
