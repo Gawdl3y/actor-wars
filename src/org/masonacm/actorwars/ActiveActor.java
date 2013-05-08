@@ -5,9 +5,9 @@ import info.gridworld.actor.Actor;
 import java.util.ArrayList;
 
 public abstract class ActiveActor extends DestructibleActor {
-    protected int energy = 200;
+    int energy = 200;
+    Inventory myinv = new Inventory();
     private boolean acted;
-    protected Inventory myinv = new Inventory();
 
     public abstract void activeAct();
 
@@ -17,12 +17,12 @@ public abstract class ActiveActor extends DestructibleActor {
         myinv = new Inventory();
     }
 
-    public ActiveActor(int ep) {
+    ActiveActor(int ep) {
         super(15);
         energy = ep;
     }
 
-    public ActiveActor(int hp, int ep) {
+    ActiveActor(int hp, int ep) {
         super(hp);
         energy = ep;
     }
@@ -49,12 +49,12 @@ public abstract class ActiveActor extends DestructibleActor {
     }
 
     //adds resource [e] to inventory
-    protected void addItem(Class<?> e) {
+    void addItem(Class<?> e) {
         //System.out.println("active.addItem(adding to inventory): "+ e.getName());
         myinv.addItem(e);
     }
 
-    protected void addItem(Class<?> e, int i) {
+    void addItem(Class<?> e, int i) {
         while(i > 0) {
             myinv.addItem(e);
             i--;
