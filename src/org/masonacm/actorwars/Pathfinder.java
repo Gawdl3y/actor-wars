@@ -6,23 +6,21 @@ import info.gridworld.grid.Location;
 
 import java.util.ArrayList;
 
-
 public class Pathfinder {
     private static Grid<Actor> mgrid;
 
-    public static ArrayList<Location> getPath(Location a, Location b, Grid<Actor> mygrid) {
+    public static ArrayList<Location> findPath(Location a, Location b, Grid<Actor> mygrid) {
         //Location t = a;
-        //System.out.println("Pathfinder.getPath()");
+        //System.out.println("Pathfinder.findPath()");
         //a = b;
         //b = t;
         int ofc = mygrid.getNumCols() * mygrid.getNumRows();
-        if(!mygrid.isValid(b))
-            return null;
-        if(mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable))
+        if(!mygrid.isValid(b)) return null;
+        if(mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable)) {
             b = LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a),new ModifiableLocation(b)).getValue();
-        if(b==null)
-            return null;
-        //	System.out.println("Pathfinder.getPath(Beginning calculations)");
+        }
+        if(b == null) return null;
+        //	System.out.println("Pathfinder.findPath(Beginning calculations)");
         mgrid = mygrid;
         ArrayList<Spot> p = new ArrayList<Spot>();
         p.add(new Spot(a));
@@ -44,10 +42,10 @@ public class Pathfinder {
             }
             (p.get(temp)).checked = true;
         }
-        //    System.out.println("Pathfinder.getPath(calculations complete)");
+        //    System.out.println("Pathfinder.findPath(calculations complete)");
         if(ofc <= 0)
             return null;
-        //    System.out.println("Pathfinder.getPath(no timout)");
+        //    System.out.println("Pathfinder.findPath(no timout)");
         ArrayList<Location> al = new ArrayList<Location>();
         al.add(b);
         int ind = (p.get(p.indexOf(b))).parent;
@@ -56,7 +54,7 @@ public class Pathfinder {
             ind = (p.get(ind)).parent;
         }
         mgrid = null;
-        //     System.out.println("Pathfinder.getPath(complete)");
+        //     System.out.println("Pathfinder.findPath(complete)");
         return al;
     }
 
@@ -120,6 +118,5 @@ public class Pathfinder {
         public double getCost(ArrayList<Spot> p) {
             return disttohere(p) + Math.abs(getRow() - tr) + Math.abs(getCol() - tc);
         }
-
     }
 }

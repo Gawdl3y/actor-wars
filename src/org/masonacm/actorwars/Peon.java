@@ -104,7 +104,7 @@ public abstract class Peon extends ActiveActor {
             protected void perform(ActiveActor a) {
                 if(location == null) return;
                 if(!location.getValue().equals(a.getLocation())) {
-                    ArrayList<Location> path = Pathfinder.getPath(a.getLocation(), location.getValue(), a.getGrid());
+                    ArrayList<Location> path = Pathfinder.findPath(a.getLocation(), location.getValue(), a.getGrid());
                     if(path == null) return;
 
                     ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), Peon.moveToGradual(location)));
