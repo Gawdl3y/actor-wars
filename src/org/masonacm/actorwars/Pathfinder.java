@@ -6,9 +6,21 @@ import info.gridworld.grid.Location;
 
 import java.util.ArrayList;
 
+/**
+ * Class to find paths to Locations
+ * <p>Uses the A* pathfinding algorithm</p>
+ * @author Chris Krueger
+ */
 public class Pathfinder {
     private static Grid<Actor> mgrid;
 
+    /**
+     * Find a path to the specified Location using the A* algorithm
+     * @param a      The starting location
+     * @param b      The end location
+     * @param mygrid The grid
+     * @return An ArrayList of Locations that form the path
+     */
     public static ArrayList<Location> findPath(Location a, Location b, Grid<Actor> mygrid) {
         //Location t = a;
         //System.out.println("Pathfinder.findPath()");
