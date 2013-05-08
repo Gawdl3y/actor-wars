@@ -5,7 +5,7 @@ import info.gridworld.actor.Actor;
 
 public class HolyHandGrenade implements Useable, Resource {
     @Override
-    public void use(Active a) {
+    public void use(ActiveActor a) {
         if(a.isFacingValidLocation()) {
             if(!a.isFacing(Actor.class)) {
                 HolyHandGrenadeBearer h = new HolyHandGrenadeBearer();
@@ -14,7 +14,7 @@ public class HolyHandGrenade implements Useable, Resource {
         }
     }
 
-    public static void give(Active a) {
+    public static void give(ActiveActor a) {
         a.addItem(HolyPin.class);
     }
 

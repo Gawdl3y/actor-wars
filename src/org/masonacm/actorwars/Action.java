@@ -13,10 +13,10 @@ import java.io.InputStream;
  */
 public abstract class Action {
     /**
-     * Performs the Action on an Active
-     * @param a The Active to perform the Action on
+     * Performs the Action on an ActiveActor
+     * @param a The ActiveActor to perform the Action on
      */
-    protected abstract void perform(Active a);
+    protected abstract void perform(ActiveActor a);
 
     /**
      * Gets the energy cost of the Action
@@ -26,7 +26,7 @@ public abstract class Action {
 
     /**
      * Gets whether or not the Action is exclusive
-     * <p>An Active may only perform one exclusive Action per turn.</p>
+     * <p>An ActiveActor may only perform one exclusive Action per turn.</p>
      * @return Whether or not the Action is exclusive
      */
     public abstract boolean isExclusive();
@@ -52,7 +52,7 @@ public abstract class Action {
     public static Action halt() {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 //wait
             }
 
@@ -87,12 +87,12 @@ public abstract class Action {
     public static Action pass(final Class<?> e, final int num) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
-                if(a.isFacing(Active.class)) {
+            protected void perform(ActiveActor a) {
+                if(a.isFacing(ActiveActor.class)) {
                     if(a.isHolding(e)) {
                         if(a.getItemCount(e) >= num) {
                             a.removeItem(e, num);
-                            if(a.getFacing() instanceof Active) ((Active) a.getFacing()).addItem(e, num);
+                            if(a.getFacing() instanceof ActiveActor) ((ActiveActor) a.getFacing()).addItem(e, num);
                         }
                     }
                 }
@@ -129,7 +129,7 @@ public abstract class Action {
     public static Action turn(final int direction) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 a.setDirection(direction);
             }
 
@@ -163,7 +163,7 @@ public abstract class Action {
     public static Action turn(final ModifiableInteger direction) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 a.setDirection(direction.getValue());
             }
 
@@ -196,7 +196,7 @@ public abstract class Action {
     public static Action move() {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.canMove()) {
                     a.move();
                 }
@@ -225,19 +225,19 @@ public abstract class Action {
     }
 
     /**
-     * Does scaled damage to the Destructible in front of the Actor
+     * Does scaled damage to the DestructibleActor in front of the Actor
      * @param scalar Scale for the damage
      * @return The resulting Action to use
      */
     public static Action attack(final int scalar) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
                     Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
-                    if(b instanceof Destructible) {
-                        ((Destructible) b).damage(scalar, a);
-                        a.energy = a.energy - getCost();
+                    if(b instanceof DestructibleActor) {
+                        ((DestructibleActor) b).damage(scalar, a);
+                        a.energy -= a.energy - getCost();
                     }
                 }
             }
@@ -272,11 +272,11 @@ public abstract class Action {
     public static Action heal(final int scalar) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
                     Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
-                    if(b instanceof Destructible) {
-                        ((Destructible) b).damage(-scalar, a);
+                    if(b instanceof DestructibleActor) {
+                        ((DestructibleActor) b).damage(-scalar, a);
                         a.energy = a.energy - getCost();
                     }
                 }
@@ -312,7 +312,7 @@ public abstract class Action {
     public static Action healSelf(final int scalar) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 a.damage(-scalar, a);
                 a.energy = a.energy - getCost();
             }
@@ -347,7 +347,7 @@ public abstract class Action {
     public static Action place(final Class<?> e) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.isFacingValidLocation()) {
                     if(!a.isFacing(Actor.class)) {
                         if(a.isHolding(e)) {
@@ -395,11 +395,11 @@ public abstract class Action {
     public static Action push() {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
                     Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
-                    if(b instanceof Movable && b instanceof Destructible) {
-                        Destructible c = (Destructible) b;
+                    if(b instanceof Movable && b instanceof DestructibleActor) {
+                        DestructibleActor c = (DestructibleActor) b;
                         c.setDirection(a.getDirection());
                         if(c.canMove()) {
                             c.move();
@@ -440,11 +440,11 @@ public abstract class Action {
     public static Action pull() {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
                     Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
-                    if(b instanceof Movable && b instanceof Destructible) {
-                        Destructible c = (Destructible) b;
+                    if(b instanceof Movable && b instanceof DestructibleActor) {
+                        DestructibleActor c = (DestructibleActor) b;
                         a.setDirection(a.getDirection() + 180);
                         c.setDirection(a.getDirection());
                         if(c.canMove()) {
@@ -487,7 +487,7 @@ public abstract class Action {
     public static Action use() {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.isFacing(Useable.class)) {
                     ((Useable) a.getFacing()).use(a);
                 }
@@ -528,7 +528,7 @@ public abstract class Action {
 
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.isHolding(e)) {
                     try {
                         ((Useable) e.newInstance()).use(a);
@@ -577,7 +577,7 @@ public abstract class Action {
 
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 try {
                     Craftable cr = (Craftable) e.newInstance();
                     boolean cancraft = true;
@@ -629,7 +629,7 @@ public abstract class Action {
     public static Action spawn(final Class<?> e) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(a.isFacingValidLocation() && a.getFacing() == null) {
                     if(a.energy >= getCost()) {
                         try {
@@ -675,7 +675,7 @@ public abstract class Action {
     public static Action say(final String text) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 String[] parts = a.getClass().getName().split("\\.");
                 System.out.println(parts[parts.length - 1] + " says: \"" + text + "\"");
                 if(text.toLowerCase().contains("spanish inquisition") && !text.toLowerCase().contains("nobody expects")) {
@@ -714,7 +714,7 @@ public abstract class Action {
     public static Action playSound(final InputStream sound) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 //MP3.play(sound);
             }
 
@@ -748,7 +748,7 @@ public abstract class Action {
     public static Action toggle(final ModifiableBoolean value) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 value.invert();
             }
 
@@ -783,7 +783,7 @@ public abstract class Action {
     public static Action set(final ModifiableBoolean value, final ModifiableBoolean newValue) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 value.setValue(newValue);
             }
 
@@ -819,7 +819,7 @@ public abstract class Action {
     public static Action increment(final ModifiableInteger value) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 value.increment();
             }
 
@@ -854,7 +854,7 @@ public abstract class Action {
     public static Action decrement(final ModifiableInteger value) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 value.decrement();
             }
 
@@ -889,7 +889,7 @@ public abstract class Action {
     public static Action set(final ModifiableInteger value, final ModifiableInteger newValue) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 value.setValue(newValue);
             }
 

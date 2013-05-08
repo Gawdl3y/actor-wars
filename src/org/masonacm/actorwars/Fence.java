@@ -7,7 +7,7 @@ import info.gridworld.grid.Location;
 import java.awt.*;
 
 
-public class Fence extends Destructible implements Craftable, Placeable {
+public class Fence extends DestructibleActor implements Craftable, Placeable {
     public Fence() {
         super(20); //fence has 20 hp
         setColor(new Color(109, 36, 0));
@@ -34,7 +34,7 @@ public class Fence extends Destructible implements Craftable, Placeable {
     }
 
     @Override
-    public void actDestructive() {
+    public void destructibleAct() {
 
     }
 }

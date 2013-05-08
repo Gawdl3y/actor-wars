@@ -6,7 +6,7 @@ import info.gridworld.grid.Location;
 
 import java.awt.*;
 
-public class Wheat extends Destructible implements Resource, Useable, Placeable {
+public class Wheat extends AgingDestructibleActor implements Resource, Useable, Placeable {
     private int age = 0;
 
     public Wheat() {
@@ -15,8 +15,8 @@ public class Wheat extends Destructible implements Resource, Useable, Placeable 
     }
 
     @Override
-    public void actDestructive() {
-        if(age <= 200) age++;
+    public void destructibleAct() {
+        super.destructibleAct();
         if(age == 200) {
             if(getGrid().getEmptyAdjacentLocations(getLocation()).size() > 0) {
                 Location l = getGrid().getEmptyAdjacentLocations(getLocation()).get((int) (Math.random() * (getGrid().getEmptyAdjacentLocations(getLocation()).size() - 1)));
@@ -27,15 +27,15 @@ public class Wheat extends Destructible implements Resource, Useable, Placeable 
     }
 
     @Override
-    public void use(Active a) {
+    public void use(ActiveActor a) {
         if(getGrid() == null) {
-            a.energy += 200;
+            a.energy += 300;
             a.removeItem(this.getClass());
         }
     }
 
     @Override
-    public void damage(int d, Active a) {
+    public void damage(int d, ActiveActor a) {
         super.damage(d, a);
         if(getHealth() <= 0) {
             if(getGrid() != null) removeSelfFromGrid();

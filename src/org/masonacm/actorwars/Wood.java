@@ -7,7 +7,7 @@ import info.gridworld.grid.Location;
 import java.awt.*;
 
 
-public class Wood extends Destructible implements Resource, Placeable {
+public class Wood extends AgingDestructibleActor implements Resource, Placeable {
     public Wood() {
         super(15);//wood planks have 15 hp (destructable super constructor)
         setColor(new Color(109, 36, 0));
@@ -20,21 +20,19 @@ public class Wood extends Destructible implements Resource, Placeable {
 
     @Override
     public void place(Grid<Actor> g, Location l) {
-        putSelfInGrid(g, l);
+        if(getGrid() == null) putSelfInGrid(g, l);
     }
 
     @Override
-    public void actDestructive() {
-
+    public void destructibleAct() {
+        super.destructibleAct();
     }
 
     @Override
-    public void damage(int d, Active a) {
+    public void damage(int d, ActiveActor a) {
         super.damage(d, a);
         if(getHealth() <= 0) {
-            if(getGrid() != null) {
-                removeSelfFromGrid();
-            }
+            if(getGrid() != null) removeSelfFromGrid();
             a.addItem(Wood.class);
         }
     }

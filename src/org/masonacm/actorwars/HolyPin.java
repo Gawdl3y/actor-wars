@@ -16,7 +16,7 @@ public class HolyPin implements Craftable, Useable {
     }
 
     @Override
-    public void use(Active a) {
+    public void use(ActiveActor a) {
         a.removeItem(HolyPin.class);
         a.addItem(HolyHandGrenade.class);
     }

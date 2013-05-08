@@ -1,5 +1,5 @@
 package org.masonacm.actorwars;
 
 public interface Useable {
-    public abstract void use(Active a);
+    public abstract void use(ActiveActor a);
 }

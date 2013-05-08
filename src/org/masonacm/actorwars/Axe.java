@@ -6,9 +6,9 @@ public class Axe implements Useable, Craftable {
 
     public Axe() {}
 
-    public void use(Active a) {
+    public void use(ActiveActor a) {
         if(a.isFacing(Wood.class)) {
-            ((Destructible) a.getFacing()).damage(damage, a);
+            ((DestructibleActor) a.getFacing()).damage(damage, a);
         }
     }
 

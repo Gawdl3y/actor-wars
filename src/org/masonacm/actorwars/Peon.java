@@ -5,7 +5,7 @@ import info.gridworld.grid.Location;
 import java.util.ArrayList;
 
 
-public abstract class Peon extends Active {
+public abstract class Peon extends ActiveActor {
     public ArrayList<Action> myactions;
 
     /**
@@ -60,7 +60,7 @@ public abstract class Peon extends Active {
             boolean set = false;
 
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(!set) {
                     set = true;
                     myc = c;
@@ -95,46 +95,30 @@ public abstract class Peon extends Active {
 
     /**
      * Assembles a list of movement and turning orders to pathfind to location [l]
-     * @param l The location to pathfind to
+     * @param location The location to pathfind to
      */
-    public static final Action moveToGradual(final Location l) {
+    public static final Action moveToGradual(final ModifiableLocation location) {
         //	System.out.println("Peon.moveToGradual()");
         return new Action() {
             @Override
-            protected void perform(Active a) {
-                if(l == null)
-                    return;
-                //System.out.println("Peon.moveToGradual(...).new Action() {...}.perform(ive got a destination)");
-                //System.out.println("peon.omoveto.preform(active): "+a);
-                //System.out.println("peon.omoveto.preform(Beginning move to)");
-                Location target = l;
-                if(l instanceof DynamicLocation) {
-                    //System.out.println("Peon.moveToGradual(...).new Action() {...}.perform(dynamic location)");
-                    target = ((DynamicLocation) l).getLocation(a);
-                }
-                //System.out.println("Peon.moveToGradual(...).new Action() {...}.perform(Target: "+target+")");
-                if(target == null) {
-                    return;
-                }
-                if(!target.equals(a.getLocation())) {
-                    //System.out.println("Peon.moveToGradual(...).new Action() {...}.perform(i'm not there yet)");
-                    ArrayList<Location> pth = Pathfinder.getPath(a.getLocation(), target, a.getGrid());
-                    if(pth == null)
-                        return;
-                    //System.out.println("Peon.moveToGradual(...).new Action() {...}.perform(ive got a path)");
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Peon.moveToGradual(target)));
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.move()));
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.turn(Utils.directionTo(a, target))));
-                    while(pth.size() > 0) {
-                        //System.out.println("Peon.moveToGradual(...).new Action() {...}.perform(mapping)");
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), move()));
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), turn(Utils.directionTo(a, pth.get(pth.size() - 1)))));
-                        pth.remove(pth.size() - 1);
+            protected void perform(ActiveActor a) {
+                if(location == null) return;
+                if(!location.getValue().equals(a.getLocation())) {
+                    ArrayList<Location> path = Pathfinder.getPath(a.getLocation(), location.getValue(), a.getGrid());
+                    if(path == null) return;
+
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), Peon.moveToGradual(location)));
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), Action.move()));
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), Action.turn(LocationFinder.directionTo(a, location))));
+                    while(path.size() > 0) {
+                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), move()));
+                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), turn(LocationFinder.directionTo(a, new ModifiableLocation(path.get(path.size() - 1))))));
+                        path.remove(path.size() - 1);
                     }
-                    //System.out.println("Peon.moveToGradual(...).new Action() {...}.perform(done)");
                 }
             }
 
+            @Override
             public int getCost() {
                 return 0;
             }
@@ -146,12 +130,12 @@ public abstract class Peon extends Active {
 
             @Override
             public Object getData() {
-                return l;
+                return location;
             }
 
             @Override
             public String toString() {
-                return "MoveToGradual(" + (l != null ? l.toString() : "null") + ")";
+                return "MoveToGradual(" + (location != null ? location.toString() : "null") + ")";
             }
         };
     }
@@ -164,7 +148,7 @@ public abstract class Peon extends Active {
     public static final Action repeat(final Action myact, final ModifiableBoolean b) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(b.getValue()) {
                     ((Peon) a).myactions.add(0, this);
                     ((Peon) a).myactions.add(0, myact);
@@ -202,7 +186,7 @@ public abstract class Peon extends Active {
     public static final Action conditionalAct(final ModifiableBoolean b, final Action ifaction) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(b.getValue()) {
                     ((Peon) a).myactions.add(0, ifaction);
                 }
@@ -241,7 +225,7 @@ public abstract class Peon extends Active {
     public static Action conditionalAct(final ModifiableBoolean b, final Action ifaction, final Action elseaction) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 if(b.getValue()) {
                     ((Peon) a).myactions.add(0, ifaction);
                 } else {
@@ -284,10 +268,10 @@ public abstract class Peon extends Active {
     public static Action placeAt(final Class<?> e, final Location l) {
         return new Action() {
             @Override
-            protected void perform(Active a) {
+            protected void perform(ActiveActor a) {
                 ((Peon) a).myactions.add(0, place(e));
-                ((Peon) a).myactions.add(0, turn(Utils.directionTo(a, l)));
-                ((Peon) a).myactions.add(0, Peon.moveToGradual(DynamicLocation.getClosestEmptyAdjacentLocation(l)));
+                ((Peon) a).myactions.add(0, turn(LocationFinder.directionTo(a, new ModifiableLocation(l))));
+                ((Peon) a).myactions.add(0, Peon.moveToGradual(LocationFinder.findClosestEmptyAdjacentLocation(a, new ModifiableLocation(l))));
             }
 
             @Override

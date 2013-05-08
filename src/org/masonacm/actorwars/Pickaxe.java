@@ -7,9 +7,9 @@ public class Pickaxe implements Craftable, Useable {
     public Pickaxe() {}
 
     @Override
-    public void use(Active a) {
+    public void use(ActiveActor a) {
         if(a.isFacing(Rock.class)) {
-            ((Destructible) a.getFacing()).damage(damg, a);
+            ((DestructibleActor) a.getFacing()).damage(damg, a);
         }
 
     }

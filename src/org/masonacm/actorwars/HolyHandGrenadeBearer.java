@@ -18,7 +18,7 @@ public class HolyHandGrenadeBearer extends Peon {
             else charging = false;
         }
 
-        if(isFacing(Destructible.class)) {
+        if(isFacing(DestructibleActor.class)) {
             getFacing().removeSelfFromGrid();
             removeSelfFromGrid();
             System.out.println("Boom!");

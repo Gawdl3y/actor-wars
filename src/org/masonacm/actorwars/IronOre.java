@@ -2,7 +2,6 @@ package org.masonacm.actorwars;
 
 import java.awt.*;
 
-
 public class IronOre extends Rock {
     public IronOre() {
         setColor(new Color(100, 30, 0));
@@ -13,10 +12,10 @@ public class IronOre extends Rock {
     }
 
     @Override
-    public void damage(int d, Active a) {
+    public void damage(int d, ActiveActor a) {
         super.damage(d, a);
         if(getHealth() <= 0) {
-            removeSelfFromGrid();
+            if(getGrid() != null) removeSelfFromGrid();
             a.addItem(Iron.class);
         }
     }

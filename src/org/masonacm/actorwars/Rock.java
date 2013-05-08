@@ -6,7 +6,7 @@ import info.gridworld.grid.Location;
 
 import java.awt.*;
 
-public class Rock extends Destructible implements Movable, Placeable, Resource {
+public class Rock extends DestructibleActor implements Movable, Placeable, Resource {
     private boolean secured = false;
 
     public Rock() {
@@ -19,10 +19,11 @@ public class Rock extends Destructible implements Movable, Placeable, Resource {
     }
 
     @Override
-    public void damage(int d, Active a) {
+    public void damage(int d, ActiveActor a) {
         super.damage(d, a);
         if(getHealth() <= 0) {
-            removeSelfFromGrid();
+            if(getGrid() != null)
+                removeSelfFromGrid();
             a.addItem(Rock.class);
         }
     }
@@ -38,14 +39,13 @@ public class Rock extends Destructible implements Movable, Placeable, Resource {
     }
 
     @Override
-    public void actDestructive() {
+    public void destructibleAct() {
 
     }
 
     @Override
-    public void place(Grid<Actor> g, Location l) {
-        putSelfInGrid(g, l);
-
+    public void place(Grid<Actor> grid, Location location) {
+        if(getGrid() == null) putSelfInGrid(grid, location);
     }
 
     @Override

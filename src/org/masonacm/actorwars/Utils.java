@@ -1,6 +1,6 @@
 package org.masonacm.actorwars;
 
-import info.gridworld.grid.Location;
+import info.gridworld.actor.Actor;
 
 /**
  * General utility methods for ActorWars
@@ -9,43 +9,31 @@ import info.gridworld.grid.Location;
  */
 public final class Utils {
     /**
-     * Gets the direction from an Active to a Location
-     * @param a The Active
-     * @param l The Location
-     * @return The direction from the Active to the Location
+     * Gets whether or not an Actor is at the ModifiableLocation specified
+     * @param actor    The Actor to test
+     * @param location The Location to test at
+     * @return Whether or not the Actor specified is at the ModifiableLocation
      */
-    public static ModifiableBoolean atLocation(final Active a, final Location l) {
+    public static ModifiableBoolean atLocation(final Actor actor, final ModifiableLocation location) {
         return new ModifiableBoolean() {
             @Override
             public boolean getValue() {
-                if(l instanceof DynamicLocation) return a.getLocation().equals(((DynamicLocation) l).getLocation(a));
-                else return a.getLocation().equals(l);
+                return actor.getLocation().equals(location.getValue());
             }
         };
     }
 
-    public static ModifiableBoolean notAtLocation(final Active a, final Location l) {
+    /**
+     * Gets whether or not an Actor is not at the ModifiableLocation specified
+     * @param actor    The Actor to test
+     * @param location The Location to test at
+     * @return Whether or not the Actor specified is at the ModifiableLocation
+     */
+    public static ModifiableBoolean notAtLocation(final Actor actor, final ModifiableLocation location) {
         return new ModifiableBoolean() {
             @Override
             public boolean getValue() {
-                if(l instanceof DynamicLocation) return !a.getLocation().equals(((DynamicLocation) l).getLocation(a));
-                else return !a.getLocation().equals(l);
-            }
-        };
-    }
-
-    public static ModifiableInteger directionTo(final Active a, final Location l) {
-        return new ModifiableInteger() {
-            @Override
-            public int getValue() {
-                if(a == null || a.getLocation() == null)
-                    return 0;
-                if(l == null || ((l instanceof DynamicLocation) ? (((DynamicLocation) l).getLocation(a) == null) : (false)))
-                    return 0;
-
-                if(l instanceof DynamicLocation)
-                    return a.getLocation().getDirectionToward(((DynamicLocation) l).getLocation(a));
-                else return a.getLocation().getDirectionToward(l);
+                return !actor.getLocation().equals(location.getValue());
             }
         };
     }
