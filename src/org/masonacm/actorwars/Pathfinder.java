@@ -19,6 +19,8 @@ public class Pathfinder {
         if(!mygrid.isValid(b))
             return null;
         if(mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable))
+            b = LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a),new ModifiableLocation(b)).getValue();
+        if(b==null)
             return null;
         //	System.out.println("Pathfinder.getPath(Beginning calculations)");
         mgrid = mygrid;
