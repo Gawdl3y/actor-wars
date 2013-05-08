@@ -4,17 +4,17 @@ import info.gridworld.actor.Actor;
 import info.gridworld.grid.Grid;
 import info.gridworld.grid.Location;
 
-public abstract class Destructible extends Actor {
+public abstract class DestructibleActor extends Actor {
     private int health = 15;
 
     //abstract funtion for extensions, equivalent to :act():
-    public abstract void actDestructive();
+    public abstract void destructibleAct();
 
-    public Destructible(int hp) {
+    public DestructibleActor(int hp) {
         health = hp;
     }
 
-    public Destructible() {
+    public DestructibleActor() {
         health = 15;
     }
 
@@ -42,29 +42,33 @@ public abstract class Destructible extends Actor {
             } else {
                 Grid<Actor> gr = getGrid();
                 Location l = getLocation().getAdjacentLocation(getDirection());
-                removeSelfFromGrid();
+                if(getGrid() != null)
+                    removeSelfFromGrid();
                 //System.out.println("destructable.move(Removed from grid)");
-                putSelfInGrid(gr, l);
+                if(getGrid() == null)
+                    putSelfInGrid(gr, l);
                 //System.out.println("destructable.move(Replaced on grid)");
             }
         }
     }
 
     //decrements :health: by [d] damage, removes actor if :health:<0
-    public void damage(int d, Active a) {
+    public void damage(int d, ActiveActor a) {
         health = health - d;
         //System.out.println("destructable.damage("+health+"):remaining");
         if(health < 0) {
-            removeSelfFromGrid();
+            if(getGrid() != null)
+                removeSelfFromGrid();
         }
     }
 
     //executes :destact(): and removes actor if :health: == 0
     final public void act() {
-        actDestructive();
+        destructibleAct();
 
         if(health <= 0) {
-            removeSelfFromGrid();
+            if(getGrid() != null)
+                removeSelfFromGrid();
         }
     }
 

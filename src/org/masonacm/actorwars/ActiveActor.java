@@ -4,25 +4,25 @@ import info.gridworld.actor.Actor;
 
 import java.util.ArrayList;
 
-public abstract class Active extends Destructible {
+public abstract class ActiveActor extends DestructibleActor {
     protected int energy = 200;
     private boolean acted;
     protected Inventory myinv = new Inventory();
 
     public abstract void activeAct();
 
-    public Active() {
+    public ActiveActor() {
         super(15);
         energy = 200;
         myinv = new Inventory();
     }
 
-    public Active(int ep) {
+    public ActiveActor(int ep) {
         super(15);
         energy = ep;
     }
 
-    public Active(int hp, int ep) {
+    public ActiveActor(int hp, int ep) {
         super(hp);
         energy = ep;
     }
@@ -121,7 +121,7 @@ public abstract class Active extends Destructible {
         }
     }
 
-    final public void actDestructive() {
+    public final void destructibleAct() {
         acted = false;
         activeAct();
         if(energy < 0) {
@@ -130,15 +130,11 @@ public abstract class Active extends Destructible {
     }
 
     //actor preforms [a] if it has not preformed an exclusive action or if [a] is not excluive
-    final public void perform(Action a) {
-        if(a == null)
-            return;
+    public final void perform(Action a) {
+        if(a == null) return;
         if((a.isExclusive() && !acted) || !a.isExclusive()) {
             a.perform(this);
-            //System.out.println("active.preform(I Just finished): "+a.getClass().getName());
-            if(a.isExclusive()) {
-                acted = true;
-            }
+            if(a.isExclusive()) acted = true;
         }
     }
 
