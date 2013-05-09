@@ -43,6 +43,7 @@ public abstract class Peon extends ActiveActor {
         }
     }
 
+    @Override
     public String toString() {
         String s = this.getClass().getName() + "\n";
         s = s + "INV:" + this.myinv.toString() + "\nACTS:" + this.myactions.toString() + "\nHEALTH:" + getHealth() + "\nENERGY:" + getEnergy();
