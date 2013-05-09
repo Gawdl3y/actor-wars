@@ -3,7 +3,12 @@ package org.masonacm.actorwars;
 import info.gridworld.actor.Actor;
 
 
-public class HolyHandGrenade implements Useable, Resource {
+public class HolyHandGrenade implements Resource, Useable {
+    @Override
+    public String getName() {
+        return "The Holy Hand Grenade of Antioch";
+    }
+
     @Override
     public void use(ActiveActor a) {
         if(a.isFacingValidLocation()) {
@@ -17,11 +22,4 @@ public class HolyHandGrenade implements Useable, Resource {
     public static void give(ActiveActor a) {
         a.addItem(HolyPin.class);
     }
-
-    @Override
-    public String getName() {
-        return "The Holy Hand Grenade of Antioch";
-    }
-
-
 }

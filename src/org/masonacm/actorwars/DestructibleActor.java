@@ -10,12 +10,12 @@ public abstract class DestructibleActor extends Actor {
     //abstract funtion for extensions, equivalent to :act():
     public abstract void destructibleAct();
 
-    public DestructibleActor(int hp) {
-        health = hp;
+    public DestructibleActor() {
+        this(15);
     }
 
-    public DestructibleActor() {
-        health = 15;
+    DestructibleActor(int hp) {
+        health = hp;
     }
 
     //returns true if actor is getFacing an empty location, or a {passable} actor that allows passage

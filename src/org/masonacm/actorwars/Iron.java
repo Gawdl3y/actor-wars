@@ -1,9 +1,13 @@
 package org.masonacm.actorwars;
 
 
-public class Iron extends IronOre implements Placeable, Resource {
+public class Iron extends IronOre implements Resource, Placeable {
     public Iron() {
-        super(100);
+        this(100);
+    }
+
+    Iron(int hp) {
+        super(hp);
     }
 
     @Override

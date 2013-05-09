@@ -9,19 +9,22 @@ import java.awt.*;
 
 public class Fence extends DestructibleActor implements Craftable, Placeable {
     public Fence() {
-        super(20); //fence has 20 hp
+        this(20);
+    }
+
+    Fence(int hp) {
+        super(hp);
         setColor(new Color(109, 36, 0));
+    }
+
+    @Override
+    public void destructibleAct() {
+
     }
 
     @Override
     public String getName() {
         return "Fence";
-    }
-
-    @Override
-    public void place(Grid<Actor> g, Location l) {
-        putSelfInGrid(g, l);
-
     }
 
     @Override
@@ -34,7 +37,7 @@ public class Fence extends DestructibleActor implements Craftable, Placeable {
     }
 
     @Override
-    public void destructibleAct() {
-
+    public void place(Grid<Actor> g, Location l) {
+        putSelfInGrid(g, l);
     }
 }

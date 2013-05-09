@@ -4,11 +4,12 @@ import java.awt.*;
 
 public class IronOre extends Rock {
     public IronOre() {
-        setColor(new Color(100, 30, 0));
+        this(50);
     }
 
-    protected IronOre(int hp) {
+    IronOre(int hp) {
         super(hp);
+        setColor(new Color(100, 30, 0));
     }
 
     @Override

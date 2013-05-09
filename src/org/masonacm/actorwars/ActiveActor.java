@@ -19,19 +19,17 @@ public abstract class ActiveActor extends DestructibleActor {
     public abstract void activeAct();
 
     public ActiveActor() {
-        super(15);
-        energy = 200;
-        myinv = new Inventory();
+        this(15, 200);
     }
 
     ActiveActor(int ep) {
-        super(15);
-        energy = ep;
+        this(15, ep);
     }
 
     ActiveActor(int hp, int ep) {
         super(hp);
         energy = ep;
+        myinv = new Inventory();
     }
 
     final void damage(int d, ActiveActor a) {

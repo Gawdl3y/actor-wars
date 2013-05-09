@@ -6,16 +6,21 @@ import info.gridworld.grid.Location;
 
 import java.awt.*;
 
-public class Rock extends DestructibleActor implements Movable, Placeable, Resource {
-    private boolean secured = false;
+public class Rock extends DestructibleActor implements Resource, Movable, Placeable {
+    private boolean secured;
 
     public Rock() {
-        super(50);
+        this(50);
+    }
+
+    Rock(int hp) {
+        super(hp);
         setColor(Color.GRAY);
     }
 
-    protected Rock(int hp) {
-        super(hp);
+    @Override
+    public void destructibleAct() {
+
     }
 
     @Override
@@ -29,6 +34,11 @@ public class Rock extends DestructibleActor implements Movable, Placeable, Resou
     }
 
     @Override
+    public String getName() {
+        return "Stone";
+    }
+
+    @Override
     public boolean isFree() {
         return !secured;
     }
@@ -39,17 +49,7 @@ public class Rock extends DestructibleActor implements Movable, Placeable, Resou
     }
 
     @Override
-    public void destructibleAct() {
-
-    }
-
-    @Override
     public void place(Grid<Actor> grid, Location location) {
         if(getGrid() == null) putSelfInGrid(grid, location);
-    }
-
-    @Override
-    public String getName() {
-        return "Stone";
     }
 }

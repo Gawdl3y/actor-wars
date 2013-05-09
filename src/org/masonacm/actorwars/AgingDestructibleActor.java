@@ -1,22 +1,14 @@
 package org.masonacm.actorwars;
 
 public abstract class AgingDestructibleActor extends DestructibleActor {
-    protected int age = 0;
+    int age = 0;
 
     public AgingDestructibleActor() {
         super();
     }
 
-    public AgingDestructibleActor(int hp) {
+    AgingDestructibleActor(int hp) {
         super(hp);
-    }
-
-    /**
-     * Increments the age of the AgingDestructibleActor
-     */
-    protected void age() {
-        if(age < Integer.MAX_VALUE) age++;
-        else age = 0;
     }
 
     /**
@@ -25,6 +17,14 @@ public abstract class AgingDestructibleActor extends DestructibleActor {
      */
     public int getAge() {
         return age;
+    }
+
+    /**
+     * Increments the age of the AgingDestructibleActor
+     */
+    void age() {
+        if(age < Integer.MAX_VALUE) age++;
+        else age = 0;
     }
 
     @Override

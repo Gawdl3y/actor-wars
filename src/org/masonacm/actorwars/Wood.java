@@ -6,21 +6,18 @@ import info.gridworld.grid.Location;
 
 import java.awt.*;
 
-
+/**
+ * Resource (15 HP)
+ * <p>For crafting</p>
+ */
 public class Wood extends AgingDestructibleActor implements Resource, Placeable {
     public Wood() {
-        super(15);//wood planks have 15 hp (destructable super constructor)
-        setColor(new Color(109, 36, 0));
+        this(15);
     }
 
     public Wood(int hp) {
         super(hp);
         setColor(new Color(109, 36, 0));
-    }
-
-    @Override
-    public void place(Grid<Actor> g, Location l) {
-        if(getGrid() == null) putSelfInGrid(g, l);
     }
 
     @Override
@@ -40,5 +37,10 @@ public class Wood extends AgingDestructibleActor implements Resource, Placeable 
     @Override
     public String getName() {
         return "Wood";
+    }
+
+    @Override
+    public void place(Grid<Actor> g, Location l) {
+        if(getGrid() == null) putSelfInGrid(g, l);
     }
 }
