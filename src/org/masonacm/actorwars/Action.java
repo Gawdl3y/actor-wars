@@ -226,25 +226,28 @@ public abstract class Action {
 
     /**
      * Does scaled damage to the DestructibleActor in front of the Actor
-     * @param scalar Scale for the damage
+     * @param energy Scale for the damage
      * @return The resulting Action to use
      */
-    public static Action attack(final int scalar) {
+    public static Action attack(final int energy) {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
                 if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
                     Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
                     if(b instanceof DestructibleActor) {
-                        ((DestructibleActor) b).damage(scalar, a);
-                        a.energy -= a.energy - getCost();
+                        if(a.getHealth() * 10 + a.getEnergy() >= energy) {
+                            ((DestructibleActor) b).damage((int) (Math.pow(energy + 4, .5) - 2), a);
+
+                            a.energy -= a.energy - getCost();
+                        }
                     }
                 }
             }
 
             @Override
             public int getCost() {
-                return (4 + scalar) * scalar;
+                return energy;
             }
 
             @Override
@@ -254,12 +257,12 @@ public abstract class Action {
 
             @Override
             public Object getData() {
-                return scalar;
+                return energy;
             }
 
             @Override
             public String toString() {
-                return "Attack(" + scalar + ")";
+                return "Attack(" + energy + ")";
             }
         };
     }
@@ -276,6 +279,7 @@ public abstract class Action {
                 if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
                     Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
                     if(b instanceof DestructibleActor) {
+
                         ((DestructibleActor) b).damage(-scalar, a);
                         a.energy = a.energy - getCost();
                     }
@@ -309,17 +313,23 @@ public abstract class Action {
      * @param scalar Scale to heal by
      * @return The resulting Action to use
      */
-    public static Action healSelf(final int scalar) {
+    public static Action healSelf(final int energy) {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
-                a.damage(-scalar, a);
-                a.energy = a.energy - getCost();
+                if(energy <= a.energy) {
+                    a.damage(-((int) ((Math.pow((12 * energy) + 49, 0.5) - 7) / 6)), a);
+                    a.energy = a.energy - getCost();
+                } else {
+                    a.damage(-((int) ((Math.pow((12 * a.energy) + 49, 0.5) - 7) / 6)), a);
+                    a.energy = 0;
+                }
+
             }
 
             @Override
             public int getCost() {
-                return (7 + (3 * scalar)) * scalar;
+                return energy;
             }
 
             @Override
@@ -329,12 +339,12 @@ public abstract class Action {
 
             @Override
             public Object getData() {
-                return scalar;
+                return energy;
             }
 
             @Override
             public String toString() {
-                return "HealSelf(" + scalar + ")";
+                return "HealSelf(" + energy + ")";
             }
         };
     }

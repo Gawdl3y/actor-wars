@@ -53,7 +53,7 @@ public abstract class DestructibleActor extends Actor {
     }
 
     //decrements :health: by [d] damage, removes actor if :health:<0
-    public void damage(int d, ActiveActor a) {
+    void damage(int d, ActiveActor a) {
         health = health - d;
         //System.out.println("destructable.damage("+health+"):remaining");
         if(health < 0) {

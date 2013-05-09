@@ -100,7 +100,8 @@ public class LocationFinder {
         return new ModifiableInteger() {
             @Override
             public int getValue() {
-                if(location1 == null || location1.getValue() == null || location2 == null || location2.getValue() == null) return 0;
+                if(location1 == null || location1.getValue() == null || location2 == null || location2.getValue() == null)
+                    return 0;
                 return location1.getValue().getDirectionToward(location2.getValue());
             }
         };

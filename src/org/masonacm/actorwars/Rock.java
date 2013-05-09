@@ -19,7 +19,7 @@ public class Rock extends DestructibleActor implements Movable, Placeable, Resou
     }
 
     @Override
-    public void damage(int d, ActiveActor a) {
+    void damage(int d, ActiveActor a) {
         super.damage(d, a);
         if(getHealth() <= 0) {
             if(getGrid() != null)

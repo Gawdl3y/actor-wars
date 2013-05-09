@@ -26,10 +26,13 @@ public class Pathfinder {
         //System.out.println("Pathfinder.findPath()");
         //a = b;
         //b = t;
+        if(b == null) return null;
+        if(a == null) return null;
+        if(mgrid == null) return null;
         int ofc = mygrid.getNumCols() * mygrid.getNumRows();
         if(!mygrid.isValid(b)) return null;
         if(mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable)) {
-            b = LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a),new ModifiableLocation(b)).getValue();
+            b = LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a), new ModifiableLocation(b)).getValue();
         }
         if(b == null) return null;
         //	System.out.println("Pathfinder.findPath(Beginning calculations)");

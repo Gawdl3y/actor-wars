@@ -15,7 +15,8 @@ public abstract class AgingDestructibleActor extends DestructibleActor {
      * Increments the age of the AgingDestructibleActor
      */
     protected void age() {
-        if(age < Integer.MAX_VALUE) age++; else age = 0;
+        if(age < Integer.MAX_VALUE) age++;
+        else age = 0;
     }
 
     /**

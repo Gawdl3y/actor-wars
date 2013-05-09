@@ -35,7 +35,7 @@ public class Wheat extends AgingDestructibleActor implements Resource, Useable, 
     }
 
     @Override
-    public void damage(int d, ActiveActor a) {
+    void damage(int d, ActiveActor a) {
         super.damage(d, a);
         if(getHealth() <= 0) {
             if(getGrid() != null) removeSelfFromGrid();

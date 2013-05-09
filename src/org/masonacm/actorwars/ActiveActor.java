@@ -34,6 +34,10 @@ public abstract class ActiveActor extends DestructibleActor {
         energy = ep;
     }
 
+    final void damage(int d, ActiveActor a) {
+        super.damage(d, a);
+    }
+
     /**
      * Tests whether or not the Actor is facing a valid location
      * @return {@code true} if the Location in front of the Actor is valid, {@code false} otherwise
