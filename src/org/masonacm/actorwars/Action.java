@@ -229,7 +229,7 @@ public abstract class Action {
      * @param energy Scale for the damage
      * @return The resulting Action to use
      */
-    public static Action attack(final int energy) {
+    public static Action attacke(final int energy) {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
@@ -239,7 +239,7 @@ public abstract class Action {
                         if(a.getHealth() * 10 + a.getEnergy() >= energy) {
                             ((DestructibleActor) b).damage((int) (Math.pow(energy + 4, .5) - 2), a);
 
-                            a.energy -= a.energy - getCost();
+                            a.energy -= getCost();
                         }
                     }
                 }
@@ -266,6 +266,51 @@ public abstract class Action {
             }
         };
     }
+
+    /**
+     * Does scaled damage to the DestructibleActor in front of the Actor
+     * @param health
+     * @return
+     */
+
+    public static Action attackh(final int health) {
+        return new Action() {
+            @Override
+            protected void perform(ActiveActor a) {
+                if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
+                    Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
+                    if(b instanceof DestructibleActor) {
+                        if(a.getHealth() * 10 + a.getEnergy() >= this.getCost()) {
+                            ((DestructibleActor) b).damage(health, a);
+
+                            a.energy -= getCost();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public int getCost() {
+                return (int)Math.pow(health + 2, 2) - 4;
+            }
+
+            @Override
+            public boolean isExclusive() {
+                return true;
+            }
+
+            @Override
+            public Object getData() {
+                return health;
+            }
+
+            @Override
+            public String toString() {
+                return "Attack(" + health + ")";
+            }
+        };
+    }
+
 
     /**
      * Heals the Actor in front of the Actor
@@ -310,7 +355,7 @@ public abstract class Action {
 
     /**
      * Heals the Actor
-     * @param scalar Scale to heal by
+     * @param energy Scale to heal by
      * @return The resulting Action to use
      */
     public static Action healSelf(final int energy) {
