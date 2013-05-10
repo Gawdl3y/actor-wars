@@ -103,25 +103,27 @@ public abstract class Peon extends ActiveActor {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
+
                 if(location == null) return;
                // System.out.println("Ive got location: "+location);
+                ModifiableLocation target = new ModifiableLocation(location.getValue());
                 if(a==null) return;
                // System.out.println("Im not null");
                 if(a.getLocation()==null) return;
                // System.out.println("I know where i am");
                 if(a.getGrid()==null) return;
               //  System.out.println("I have a world");
-                if(!location.getValue().equals(a.getLocation())) {
-                    ArrayList<Location> path = Pathfinder.findPath(a.getLocation(), location.getValue(), a.getGrid());
+                if(!target.equals(a.getLocation())) {
+                    ArrayList<Location> path = Pathfinder.findPath(a.getLocation(), target, a.getGrid());
                 //    System.out.println("I'm not there yet");
                 if(path == null) return;
                  //   System.out.println("Ive got a path: "+path);
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), Peon.moveToGradual(location)));
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), Action.move()));
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), Action.turn(LocationFinder.directionTo(a, location))));
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Peon.moveToGradual(new ModifiableLocation(target))));
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Action.move()));
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Action.turn(LocationFinder.directionTo(a, new ModifiableLocation(target)))));
                     while(path.size() > 0) {
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), move()));
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, location), turn(LocationFinder.directionTo(a, new ModifiableLocation(path.get(path.size() - 1))))));
+                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), move()));
+                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), turn(LocationFinder.directionTo(a, new ModifiableLocation(path.get(path.size() - 1))))));
                         path.remove(path.size() - 1);
                     }
                   //  System.out.println("Im done building actions");
