@@ -225,11 +225,11 @@ public abstract class Action {
     }
 
     /**
-     * Does scaled damage to the DestructibleActor in front of the Actor
-     * @param energy Scale for the damage
+     * Does damage to the DestructibleActor in front of the ActiveActor based on the amount of energy that it wants to spend
+     * @param energy The amount of energy to use for the attack
      * @return The resulting Action to use
      */
-    public static Action attacke(final int energy) {
+    public static Action attackEP(final int energy) {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
@@ -262,18 +262,17 @@ public abstract class Action {
 
             @Override
             public String toString() {
-                return "Attack(" + energy + ")";
+                return "AttackEP(" + energy + ")";
             }
         };
     }
 
     /**
-     * Does scaled damage to the DestructibleActor in front of the Actor
-     * @param health
-     * @return
+     * Does damage to the DestructibleActor in front of the ActiveActor by an amount of HP
+     * @param health The amount of damage to deal
+     * @return The resulting Action to use
      */
-
-    public static Action attackh(final int health) {
+    public static Action attackHP(final int health) {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
@@ -282,7 +281,6 @@ public abstract class Action {
                     if(b instanceof DestructibleActor) {
                         if(a.getHealth() * 10 + a.getEnergy() >= this.getCost()) {
                             ((DestructibleActor) b).damage(health, a);
-
                             a.energy -= getCost();
                         }
                     }
@@ -291,7 +289,7 @@ public abstract class Action {
 
             @Override
             public int getCost() {
-                return (int)Math.pow(health + 2, 2) - 4;
+                return (int) Math.pow(health + 2, 2) - 4;
             }
 
             @Override
@@ -306,7 +304,7 @@ public abstract class Action {
 
             @Override
             public String toString() {
-                return "Attack(" + health + ")";
+                return "AttackHP(" + health + ")";
             }
         };
     }
@@ -324,7 +322,6 @@ public abstract class Action {
                 if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
                     Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
                     if(b instanceof DestructibleActor) {
-
                         ((DestructibleActor) b).damage(-scalar, a);
                         a.energy = a.energy - getCost();
                     }
