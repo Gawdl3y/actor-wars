@@ -24,19 +24,27 @@ public class Pathfinder {
     public static ArrayList<Location> findPath(Location a, Location b, Grid<Actor> mygrid) {
         //Location t = a;
         //System.out.println("Pathfinder.findPath()");
+        mgrid = mygrid;
         //a = b;
         //b = t;
         if(b == null) return null;
+        //System.out.println("Target not null");
         if(a == null) return null;
+       // System.out.println("Source not null");
         if(mgrid == null) return null;
+       // System.out.println("Grid not null");
+       // System.out.println("All Parameters not null");
         int ofc = mygrid.getNumCols() * mygrid.getNumRows();
         if(!mygrid.isValid(b)) return null;
+      //  System.out.println("valid target");
         if(mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable)) {
+          //  System.out.println("need to recalculate target");
             b = LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a), new ModifiableLocation(b)).getValue();
         }
+
         if(b == null) return null;
+       // System.out.println("Target Finalized");
         //	System.out.println("Pathfinder.findPath(Beginning calculations)");
-        mgrid = mygrid;
         ArrayList<Spot> p = new ArrayList<Spot>();
         p.add(new Spot(a));
         while(!p.contains(b) && ofc > 0) {
