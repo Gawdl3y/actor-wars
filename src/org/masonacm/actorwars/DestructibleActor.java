@@ -5,7 +5,7 @@ import info.gridworld.grid.Grid;
 import info.gridworld.grid.Location;
 
 public abstract class DestructibleActor extends Actor {
-    private int health = 15;
+    int health = 15;
 
     //abstract funtion for extensions, equivalent to :act():
     public abstract void destructibleAct();
