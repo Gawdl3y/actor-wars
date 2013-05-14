@@ -33,7 +33,7 @@ public final class Utils {
         return new ModifiableBoolean() {
             @Override
             public boolean getValue() {
-                if(!actor.getLocation().equals(location.getValue())) System.out.println("I'm not there "+location);
+                //if(!actor.getLocation().equals(location.getValue())) System.out.println("I'm not there "+location);
                 return !actor.getLocation().equals(location.getValue());
             }
         };
