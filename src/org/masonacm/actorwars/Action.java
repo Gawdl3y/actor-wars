@@ -1,22 +1,11 @@
-//TODO Someone alphabetize the static actions, it would make things a lot easier. I'm writing the manual and working on my own Peon extension. Also I'm lazy. Oh, and I am aware the the functions methods whateverz I added myself are not alphabetized either. Deal with it. ~Prophet
-//TODO Hey, Y'all who JavaDocs. I would humbly suggest making a distinction in the descriptions of actions that deal with two actors between the performer and the performed upon. I'll fix a few i just happen to catch... maybe. ~Prophet
+//TODO Provide distinction between target and performer in JavaDocs
 package org.masonacm.actorwars;
 
 import info.gridworld.actor.Actor;
 import info.gridworld.grid.Location;
 
 import java.io.InputStream;
-/*
-Most high and exalted Schuyler,
 
-Meh on you Shwhylr. I know my additions look wretched. tew bad.
-I guess I wasn't in a very reasonable mood when I did all this,
-huh?
-
-Sincerely, Ike/Prophet.
-
-P.S. Please don't make me have to fork the repository... :D
-*/
 /**
  * Something to do
  * <p>Provides several base Action-generating static methods</p>
@@ -238,6 +227,48 @@ public abstract class Action {
     }
 
     /**
+     * Does damage to the DestructibleActor in front of the ActiveActor by an amount of HP
+     * @param health The amount of damage to deal
+     * @return The resulting Action to use
+     */
+    public static Action attackHP(final int health) {
+        return new Action() {
+            @Override
+            protected void perform(ActiveActor a) {
+                if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
+                    Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
+                    if(b instanceof DestructibleActor) {
+                        if(a.getHealth() * 10 + a.getEnergy() >= this.getCost()) {
+                            ((DestructibleActor) b).damage(health, a);
+                            a.energy -= getCost();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public int getCost() {
+                return (int) Math.pow(health + 2, 2) - 4;
+            }
+
+            @Override
+            public boolean isExclusive() {
+                return true;
+            }
+
+            @Override
+            public Object getData() {
+                return health;
+            }
+
+            @Override
+            public String toString() {
+                return "AttackHP(" + health + ")";
+            }
+        };
+    }
+
+    /**
      * Does damage to the DestructibleActor in front of the ActiveActor based on the amount of energy that it wants to spend
      * @param energy The amount of energy to use for the attack
      * @return The resulting Action to use
@@ -281,49 +312,6 @@ public abstract class Action {
     }
 
     /**
-     * Does damage to the DestructibleActor in front of the ActiveActor by an amount of HP
-     * @param health The amount of damage to deal
-     * @return The resulting Action to use
-     */
-    public static Action attackHP(final int health) {
-        return new Action() {
-            @Override
-            protected void perform(ActiveActor a) {
-                if(a.getGrid().isValid(a.getLocation().getAdjacentLocation(a.getDirection()))) {
-                    Actor b = a.getGrid().get(a.getLocation().getAdjacentLocation(a.getDirection()));
-                    if(b instanceof DestructibleActor) {
-                        if(a.getHealth() * 10 + a.getEnergy() >= this.getCost()) {
-                            ((DestructibleActor) b).damage(health, a);
-                            a.energy -= getCost();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public int getCost() {
-                return (int) Math.pow(health + 2, 2) - 4;
-            }
-
-            @Override
-            public boolean isExclusive() {
-                return true;
-            }
-
-            @Override
-            public Object getData() {
-                return health;
-            }
-
-            @Override
-            public String toString() {
-                return "AttackHP(" + health + ")";
-            }
-        };
-    }
-
-//see, eye fixed wun ^_^ ~Prophet
-    /**
      * Heals the Actor in front of the Actor that performs this action
      * @param scalar Scale to heal by
      * @return The resulting Action to use
@@ -364,44 +352,6 @@ public abstract class Action {
     }
 
     /**
-     * unHeals the Actor converting health to energy
-     * @param health Scale to heal by
-     * @return The resulting Action to use
-     */
-    public static Action unhealSelf(final int health) {
-        return new Action() {
-            @Override
-            protected void perform(ActiveActor a) {
-                if(health <= a.health) {
-                    a.health -= health;
-                    a.energy += (int)(Math.pow((6*health)+7,2)-48)/12;
-                }
-            }
-
-            @Override
-            public int getCost() {
-                return 0;
-            }
-
-            @Override
-            public boolean isExclusive() {
-                return true;
-            }
-
-            @Override
-            public Object getData() {
-                return health;
-            }
-
-            @Override
-            public String toString() {
-                return "HealSelf(" + getCost()+ ")";
-            }
-        };
-    }
-
-
-    /**
      * Heals the Actor
      * @param energy Scale to heal by
      * @return The resulting Action to use
@@ -438,6 +388,80 @@ public abstract class Action {
             @Override
             public String toString() {
                 return "HealSelf(" + energy + ")";
+            }
+        };
+    }
+
+    /**
+     * Siphons the Actor's health into energy
+     * @param health The amount of health to siphon into energy
+     * @return The resulting Action to use
+     */
+    public static Action siphonSelfHP(final int health) {
+        return new Action() {
+            @Override
+            protected void perform(ActiveActor a) {
+                if(health <= a.health) {
+                    a.health -= health;
+                    a.energy -= getCost();
+                }
+            }
+
+            @Override
+            public int getCost() {
+                return (int) (Math.pow((6 * health) + 7, 2) - 48) / 12;
+            }
+
+            @Override
+            public boolean isExclusive() {
+                return true;
+            }
+
+            @Override
+            public Object getData() {
+                return health;
+            }
+
+            @Override
+            public String toString() {
+                return "SiphonSelfHP(" + health + ")";
+            }
+        };
+    }
+
+    /**
+     * Siphons the Actor's health into energy, by the amount of energy it wishes to spend
+     * @param energy The amount of energy to attempt to siphon health to
+     * @return The resulting Action to use
+     */
+    public static Action siphonSelfEP(final int energy) {
+        return new Action() {
+            @Override
+            protected void perform(ActiveActor a) {
+                if(energy <= a.health) {
+                    a.health -= (2 * Math.pow((3 * energy) + 12, 0.5) - 7) / 6;
+                    a.energy -= energy;
+                }
+            }
+
+            @Override
+            public int getCost() {
+                return energy;
+            }
+
+            @Override
+            public boolean isExclusive() {
+                return true;
+            }
+
+            @Override
+            public Object getData() {
+                return energy;
+            }
+
+            @Override
+            public String toString() {
+                return "SiphonSelfEP(" + energy + ")";
             }
         };
     }
