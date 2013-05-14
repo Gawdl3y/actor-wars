@@ -533,13 +533,14 @@ public abstract class Action {
             }
         };
     }
-
+/*
     /**
      * Uses the Useable in front of the Actor
      * @return The resulting Action to use
      * @see org.masonacm.actorwars.Action#use(Class)
-     */
-    public static Action use() {
+     *
+
+   public static Action use() {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
@@ -568,13 +569,13 @@ public abstract class Action {
                 return "Use()";
             }
         };
-    }
+    }*/
 
     /**
      * Uses either an item that an Actor is holding, or uses the item in front of the Actor
      * @param e The class of the item/object
      * @return The resulting Action to use
-     * @see org.masonacm.actorwars.Action#use()
+     *
      */
     public static Action use(final Class<?> e) {
         if(!Utils.isImplemented(e, Useable.class)) {

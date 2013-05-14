@@ -23,31 +23,32 @@ public class Pathfinder {
      */
     public static ArrayList<Location> findPath(Location a, Location b, Grid<Actor> mygrid) {
         //Location t = a;
-        //System.out.println("Pathfinder.findPath()");
+        System.out.println("Pathfinder.nonmodif("+b+")");
         mgrid = mygrid;
         //a = b;
         //b = t;
         if(b == null) return null;
-        //System.out.println("Target not null");
+        System.out.println("Target not null");
         if(a == null) return null;
-       // System.out.println("Source not null");
+        System.out.println("Source not null");
         if(mgrid == null) return null;
-       // System.out.println("Grid not null");
-       // System.out.println("All Parameters not null");
+        System.out.println("Grid not null");
+        System.out.println("All Parameters not null");
         int ofc = mygrid.getNumCols() * mygrid.getNumRows();
         if(!mygrid.isValid(b)) return null;
-      //  System.out.println("valid target");
+        System.out.println("valid target");
         if(mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable)) {
-          //  System.out.println("need to recalculate target");
+            System.out.println("need to recalculate target");
             b = LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a), new ModifiableLocation(b)).getValue();
         }
 
         if(b == null) return null;
-       // System.out.println("Target Finalized");
-        //	System.out.println("Pathfinder.findPath(Beginning calculations)");
+        System.out.println("Target Finalized");
+        	System.out.println("Pathfinder.findPath(Beginning calculations)");
         ArrayList<Spot> p = new ArrayList<Spot>();
         p.add(new Spot(a));
         while(!p.contains(b) && ofc > 0) {
+            System.out.println("Thinkingnonmodif:"+ofc);
             ofc--;
             int temp = p.indexOf(getLowest(p));
             for(Location q : mygrid.getValidAdjacentLocations(getLowest(p))) {
@@ -65,10 +66,10 @@ public class Pathfinder {
             }
             (p.get(temp)).checked = true;
         }
-        //    System.out.println("Pathfinder.findPath(calculations complete)");
+            System.out.println("Pathfinder.findPath(calculations complete)");
         if(ofc <= 0)
             return null;
-        //    System.out.println("Pathfinder.findPath(no timout)");
+            System.out.println("Pathfinder.findPath(no timout)");
         ArrayList<Location> al = new ArrayList<Location>();
         al.add(b);
         int ind = (p.get(p.indexOf(b))).parent;
@@ -77,7 +78,7 @@ public class Pathfinder {
             ind = (p.get(ind)).parent;
         }
         mgrid = null;
-        //     System.out.println("Pathfinder.findPath(complete)");
+            System.out.println("Pathfinder.findPathNonmodif(complete)");
         return al;
     }
     /**
@@ -89,31 +90,32 @@ public class Pathfinder {
      */
     public static ArrayList<Location> findPath(Location a, ModifiableLocation b, Grid<Actor> mygrid) {
         //Location t = a;
-        //System.out.println("Pathfinder.findPath()");
+        System.out.println("Pathfinder.findPathmodifiable("+b.getValue()+")");
         mgrid = mygrid;
         //a = b;
         //b = t;
         if(b == null) return null;
-        //System.out.println("Target not null");
+        System.out.println("Target not null");
         if(a == null) return null;
-        // System.out.println("Source not null");
+         System.out.println("Source not null");
         if(mgrid == null) return null;
-        // System.out.println("Grid not null");
-        // System.out.println("All Parameters not null");
+         System.out.println("Grid not null");
+         System.out.println("All Parameters not null");
         int ofc = mygrid.getNumCols() * mygrid.getNumRows();
         if(!mygrid.isValid(b.getValue())) return null;
-        //  System.out.println("valid target");
+          System.out.println("valid target");
         if(mygrid.get(b.getValue()) != null && !(mygrid.get(b.getValue()) instanceof Passable)) {
-            //  System.out.println("need to recalculate target");
+              System.out.println("need to recalculate target");
             b.setValue(LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a), b).getValue());
         }
 
         if(b == null) return null;
-        // System.out.println("Target Finalized");
-        //	System.out.println("Pathfinder.findPath(Beginning calculations)");
+         System.out.println("Target Finalized");
+        	System.out.println("Pathfinder.findPath(Beginning calculations)");
         ArrayList<Spot> p = new ArrayList<Spot>();
         p.add(new Spot(a));
-        while(!p.contains(b) && ofc > 0) {
+        while(!p.contains(b.getValue()) && ofc > 0) {
+            System.out.println("Thinkingmodif:"+ofc);
             ofc--;
             int temp = p.indexOf(getLowest(p));
             for(Location q : mygrid.getValidAdjacentLocations(getLowest(p))) {
@@ -131,19 +133,23 @@ public class Pathfinder {
             }
             (p.get(temp)).checked = true;
         }
-        //    System.out.println("Pathfinder.findPath(calculations complete)");
-        if(ofc <= 0)
+            System.out.println("Pathfinder.findPath(calculations complete)");
+        if(ofc <= 0){
+
+            System.out.println("Pathfinder.findPath(I timed out)");
+            System.out.println(" p = "+p);
             return null;
-        //    System.out.println("Pathfinder.findPath(no timout)");
+        }
+           System.out.println("Pathfinder.findPath(no timout)");
         ArrayList<Location> al = new ArrayList<Location>();
         al.add(b.getValue());
-        int ind = (p.get(p.indexOf(b))).parent;
+        int ind = (p.get(p.indexOf(b.getValue()))).parent;
         while((p.get(ind)).parent != -1) {
             al.add(0, new Location(p.get(ind).getRow(), p.get(ind).getCol()));
             ind = (p.get(ind)).parent;
         }
         mgrid = null;
-        //     System.out.println("Pathfinder.findPath(complete)");
+             System.out.println("Pathfinder.findPath(complete)");
         return al;
     }
     private static Location getLowest(ArrayList<Spot> p) {

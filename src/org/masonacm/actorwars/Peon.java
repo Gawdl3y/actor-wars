@@ -105,19 +105,19 @@ public abstract class Peon extends ActiveActor {
             protected void perform(ActiveActor a) {
 
                 if(location == null) return;
-               // System.out.println("Ive got location: "+location);
+                System.out.println("Ive got location: "+location);
                 ModifiableLocation target = new ModifiableLocation(location.getValue());
                 if(a==null) return;
-               // System.out.println("Im not null");
+                System.out.println("Im not null");
                 if(a.getLocation()==null) return;
-               // System.out.println("I know where i am");
+                System.out.println("I know where i am");
                 if(a.getGrid()==null) return;
-              //  System.out.println("I have a world");
+                System.out.println("I have a world");
                 if(!target.equals(a.getLocation())) {
                     ArrayList<Location> path = Pathfinder.findPath(a.getLocation(), target, a.getGrid());
-                //    System.out.println("I'm not there yet");
+                    System.out.println("I'm not there yet");
                 if(path == null) return;
-                 //   System.out.println("Ive got a path: "+path);
+                    System.out.println("Ive got a path: "+path);
                     ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Peon.moveToGradual(new ModifiableLocation(target))));
                     ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Action.move()));
                     ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Action.turn(LocationFinder.directionTo(a, new ModifiableLocation(target)))));
@@ -126,7 +126,7 @@ public abstract class Peon extends ActiveActor {
                         ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), turn(LocationFinder.directionTo(a, new ModifiableLocation(path.get(path.size() - 1))))));
                         path.remove(path.size() - 1);
                     }
-                  //  System.out.println("Im done building actions");
+                    System.out.println("Im done building actions");
                 }
             }
 

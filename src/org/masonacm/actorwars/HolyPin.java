@@ -5,7 +5,13 @@ public class HolyPin implements Craftable, Useable {
     public Inventory getRecipe() {
         Inventory i = new Inventory();
         i.addItem(Iron.class);
+        i.addItem(Iron.class);
+        i.addItem(Iron.class);
         i.addItem(Rock.class);
+        i.addItem(Rock.class);
+        i.addItem(Rock.class);
+        i.addItem(Wood.class);
+        i.addItem(Wood.class);
         i.addItem(Wood.class);
         return i;
     }
