@@ -153,7 +153,7 @@ public abstract class Peon extends ActiveActor {
     }
 
     /**
-     * Repeats action [myact] untill [b].getValue() returns false
+     * Repeats action [myact] until [b].getValue() returns false
      * @param myact The Action to repeat
      * @param b     The flag for controlling the loop
      */
