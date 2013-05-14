@@ -2,8 +2,6 @@ package org.masonacm.actorwars;
 
 import info.gridworld.actor.Actor;
 
-import java.util.ArrayList;
-
 /**
  * An Actor that can perform Actions
  * @author Chris Krueger
@@ -145,15 +143,6 @@ public abstract class ActiveActor extends DestructibleActor {
             }
         }
         return cancraft;
-    }
-
-    //TODO: JavaDoc here
-    public ArrayList<Actor> scan(int range, Class<?> e) {
-        ArrayList<Actor> a = new ArrayList<Actor>();
-        int x = getLocation().getCol();
-        int y = getLocation().getCol();
-
-        return a;
     }
 
     /**
