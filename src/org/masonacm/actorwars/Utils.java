@@ -1,6 +1,7 @@
 package org.masonacm.actorwars;
 
 import info.gridworld.actor.Actor;
+import info.gridworld.grid.Location;
 
 /**
  * General utility methods for ActorWars
@@ -9,30 +10,30 @@ import info.gridworld.actor.Actor;
  */
 public final class Utils {
     /**
-     * Gets whether or not an Actor is at the ModifiableLocation specified
+     * Tests if an Actor is at the DynamicValue&lt;Location&gt; specified
      * @param actor    The Actor to test
      * @param location The Location to test at
-     * @return Whether or not the Actor specified is at the ModifiableLocation
+     * @return Whether or not the Actor specified is at the DynamicValue&lt;Location&gt;
      */
-    public static ModifiableBoolean atLocation(final Actor actor, final ModifiableLocation location) {
+    public static ModifiableBoolean atLocation(final Actor actor, final DynamicValue<Location> location) {
         return new ModifiableBoolean() {
             @Override
-            public boolean getValue() {
+            public Boolean getValue() {
                 return actor.getLocation().equals(location.getValue());
             }
         };
     }
 
     /**
-     * Gets whether or not an Actor is not at the ModifiableLocation specified
+     * Tests if an Actor is not at the DynamicValue&lt;Location&gt; specified
      * @param actor    The Actor to test
      * @param location The Location to test at
-     * @return Whether or not the Actor specified is at the ModifiableLocation
+     * @return Whether or not the Actor specified is at the DynamicValue&lt;Location&gt;
      */
-    public static ModifiableBoolean notAtLocation(final Actor actor, final ModifiableLocation location) {
+    public static ModifiableBoolean notAtLocation(final Actor actor, final DynamicValue<Location> location) {
         return new ModifiableBoolean() {
             @Override
-            public boolean getValue() {
+            public Boolean getValue() {
                 if(!actor.getLocation().equals(location.getValue())) System.out.println("I'm not there "+location);
                 return !actor.getLocation().equals(location.getValue());
             }
@@ -40,7 +41,7 @@ public final class Utils {
     }
 
     /**
-     * Checks to see if an object implements a class
+     * Tests if an object implements a class
      * @param e The object to check for the implementation
      * @param i The class to look for
      * @return True if the object implements the class, false if it doesn't

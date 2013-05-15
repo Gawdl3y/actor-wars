@@ -98,7 +98,7 @@ public abstract class Peon extends ActiveActor {
      * Assembles a list of movement and turning orders to pathfind to location [l]
      * @param location The location to pathfind to
      */
-    public static final Action moveToGradual(final ModifiableLocation location) {
+    public static final Action moveToGradual(final DynamicValue<Location> location) {
         //	System.out.println("Peon.moveToGradual()");
         return new Action() {
             @Override

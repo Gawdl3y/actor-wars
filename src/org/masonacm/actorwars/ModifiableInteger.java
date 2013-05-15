@@ -5,9 +5,7 @@ package org.masonacm.actorwars;
  * <p>Used so that references to instances are maintained when their value is changed</p>
  * @author Schuyler Cebulskie
  */
-public class ModifiableInteger {
-    private int value;
-
+public class ModifiableInteger extends ModifiableValue<Integer> {
     /**
      * Default constructor (value: 0)
      */
@@ -29,30 +27,6 @@ public class ModifiableInteger {
      */
     public ModifiableInteger(ModifiableInteger value) {
         this.value = value.getValue();
-    }
-
-    /**
-     * Sets the value of the integer
-     * @param value The value to set
-     */
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    /**
-     * Sets the value of the integer
-     * @param value The value to set
-     */
-    public void setValue(ModifiableInteger value) {
-        this.value = value.getValue();
-    }
-
-    /**
-     * Gets the integer value
-     * @return The integer value
-     */
-    public int getValue() {
-        return value;
     }
 
     /**
@@ -133,53 +107,44 @@ public class ModifiableInteger {
         this.value /= divisor.getValue();
     }
 
-    /**
-     * Gets a string representation of the integer
-     * @return A string representation of the integer
-     */
-    @Override
-    public String toString() {
-        return Integer.toString(value);
-    }
-
 
     /**
-     * Performs addition with two ModifiableInteger objects
+     * Performs addition with two {@code DynamicValue&lt;Integer&gt;} objects
      * @param addend1 The first value
      * @param addend2 The second value
      * @return The result of the addition
      */
-    public static ModifiableInteger add(ModifiableInteger addend1, ModifiableInteger addend2) {
+    public static ModifiableInteger add(DynamicValue<Integer> addend1, DynamicValue<Integer> addend2) {
         return new ModifiableInteger(addend1.getValue() + addend2.getValue());
     }
 
     /**
-     * Performs subtraction with two ModifiableInteger objects
+     * Performs subtraction with two {@code DynamicValue&lt;Integer&gt;} objects
      * @param minuend    The value to subtract from
      * @param subtrahend The value to subtract by
      * @return The result of the subtraction
      */
-    public static ModifiableInteger subtract(ModifiableInteger minuend, ModifiableInteger subtrahend) {
+    public static ModifiableInteger subtract(DynamicValue<Integer> minuend, DynamicValue<Integer> subtrahend) {
         return new ModifiableInteger(minuend.getValue() - subtrahend.getValue());
     }
 
     /**
-     * Performs multiplication with two ModifiableInteger objects
+     * Performs multiplication with two {@code DynamicValue&lt;Integer&gt;} objects
      * @param factor1 The value to multiply
      * @param factor2 The value to multiply by
      * @return The result of the multiplication
      */
-    public static ModifiableInteger multiply(ModifiableInteger factor1, ModifiableInteger factor2) {
+    public static ModifiableInteger multiply(DynamicValue<Integer> factor1, DynamicValue<Integer> factor2) {
         return new ModifiableInteger(factor1.getValue() * factor2.getValue());
     }
 
     /**
-     * Performs division with two ModifiableInteger objects
+     * Performs division with two {@code DynamicValue&lt;Integer&gt;} objects
      * @param dividend The value to divide
      * @param divisor  The value to divide by
      * @return The result of the division
      */
-    public static ModifiableInteger divide(ModifiableInteger dividend, ModifiableInteger divisor) {
+    public static ModifiableInteger divide(DynamicValue<Integer> dividend, DynamicValue<Integer> divisor) {
         return new ModifiableInteger(dividend.getValue() / divisor.getValue());
     }
 }

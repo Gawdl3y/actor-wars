@@ -7,9 +7,7 @@ import info.gridworld.grid.Location;
  * <p>Used so that references to instances are maintained when their value is changed</p>
  * @author Schuyler Cebulskie
  */
-public class ModifiableLocation {
-    private Location value;
-
+public class ModifiableLocation extends ModifiableValue<Location> {
     /**
      * Default constructor (value: (0, 0))
      */
@@ -18,7 +16,7 @@ public class ModifiableLocation {
     }
 
     /**
-     * Fill constructor (maintains reference to the Location)
+     * Fill constructor
      * @param value The Location to use
      */
     public ModifiableLocation(Location value) {
@@ -35,27 +33,11 @@ public class ModifiableLocation {
     }
 
     /**
-     * Copy constructor (does not maintain reference to the Location)
+     * Copy constructor
      * @param value The Location to use
      */
-    public ModifiableLocation(ModifiableLocation value) {
-        this.value = new Location(value.getRow(), value.getCol());
-    }
-
-    /**
-     * Sets the Location value (maintains reference to the Location)
-     * @param value The Location to use
-     */
-    public void setValue(Location value) {
-        this.value = value;
-    }
-
-    /**
-     * Sets the Location value (does not maintain reference to the Location)
-     * @param value The Location to use
-     */
-    public void setValue(ModifiableLocation value) {
-        this.value = new Location(value.getRow(), value.getCol());
+    public ModifiableLocation(DynamicValue<Location> value) {
+        this.value = new Location(value.getValue().getRow(), value.getValue().getCol());
     }
 
     /**
@@ -65,14 +47,6 @@ public class ModifiableLocation {
      */
     public void setValue(int row, int col) {
         this.value = new Location(row, col);
-    }
-
-    /**
-     * Gets the Location value
-     * @return The Location value
-     */
-    public Location getValue() {
-        return value;
     }
 
     /**
@@ -92,11 +66,20 @@ public class ModifiableLocation {
     }
 
     /**
-     * Gets a string representation of the Location ((row, col))
-     * @return A string representation of the Location
+     * Gets the direction to another Location
+     * @param location The Location to get the direction to
+     * @return The direction from this Location to the specified Location
      */
-    @Override
-    public String toString() {
-        return value.toString();
+    public int directionTo(DynamicValue<Location> location) {
+        return value.getDirectionToward(location.getValue());
+    }
+
+    /**
+     * Gets the direction to another Location
+     * @param location The Location to get the direction to
+     * @return The direction from this Location to the specified Location
+     */
+    public int directionTo(Location location) {
+        return value.getDirectionToward(location);
     }
 }

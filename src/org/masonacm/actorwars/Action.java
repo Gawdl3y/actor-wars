@@ -126,7 +126,7 @@ public abstract class Action {
      * Turns the Actor to a direction
      * @param direction The direction to turn to
      * @return The resulting Action to use
-     * @see org.masonacm.actorwars.Action#turn(ModifiableInteger)
+     * @see org.masonacm.actorwars.Action#turn(DynamicValue)
      */
     public static Action turn(final int direction) {
         return new Action() {
@@ -162,7 +162,7 @@ public abstract class Action {
      * @param direction The direction to turn to
      * @return The resulting Action to use
      */
-    public static Action turn(final ModifiableInteger direction) {
+    public static Action turn(final DynamicValue<Integer> direction) {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {

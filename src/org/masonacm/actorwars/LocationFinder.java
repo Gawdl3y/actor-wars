@@ -60,8 +60,8 @@ public class LocationFinder {
      * @param location The Location to find the closest to
      * @return The closest empty adjacent Location to the provided Location
      */
-    public static ModifiableLocation findClosestEmptyAdjacentLocation(final Actor a, final ModifiableLocation location) {
-        return new ModifiableLocation() {
+    public static DynamicValue<Location> findClosestEmptyAdjacentLocation(final Actor a, final DynamicValue<Location> location) {
+        return new DynamicValue<Location>() {
             @Override
             public Location getValue() {
                 if(location == null) return null;
@@ -96,10 +96,10 @@ public class LocationFinder {
      * @param location2 The second Location
      * @return The direction from the Actor to the Location
      */
-    public static ModifiableInteger directionTo(final ModifiableLocation location1, final ModifiableLocation location2) {
-        return new ModifiableInteger() {
+    public static DynamicValue<Integer> directionTo(final DynamicValue<Location> location1, final DynamicValue<Location> location2) {
+        return new DynamicValue<Integer>() {
             @Override
-            public int getValue() {
+            public Integer getValue() {
                 if(location1 == null || location1.getValue() == null || location2 == null || location2.getValue() == null)
                     return 0;
                 return location1.getValue().getDirectionToward(location2.getValue());
@@ -113,10 +113,10 @@ public class LocationFinder {
      * @param location The Location
      * @return The direction from the Actor to the Location
      */
-    public static ModifiableInteger directionTo(final Actor actor, final ModifiableLocation location) {
-        return new ModifiableInteger() {
+    public static DynamicValue<Integer> directionTo(final Actor actor, final DynamicValue<Location> location) {
+        return new DynamicValue<Integer>() {
             @Override
-            public int getValue() {
+            public Integer getValue() {
                 if(actor == null || actor.getLocation() == null) return 0;
                 if(location == null || location.getValue() == null) return 0;
                 return actor.getLocation().getDirectionToward(location.getValue());
@@ -130,10 +130,10 @@ public class LocationFinder {
      * @param actor2 The second Actor
      * @return The direction from the Actor to the Location
      */
-    public static ModifiableInteger directionTo(final Actor actor1, final Actor actor2) {
-        return new ModifiableInteger() {
+    public static DynamicValue<Integer> directionTo(final Actor actor1, final Actor actor2) {
+        return new DynamicValue<Integer>() {
             @Override
-            public int getValue() {
+            public Integer getValue() {
                 if(actor1 == null || actor1.getLocation() == null) return 0;
                 if(actor2 == null || actor2.getLocation() == null) return 0;
                 return actor1.getLocation().getDirectionToward(actor2.getLocation());
