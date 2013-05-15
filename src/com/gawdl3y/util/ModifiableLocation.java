@@ -1,4 +1,4 @@
-package org.masonacm.actorwars;
+package com.gawdl3y.util;
 
 import info.gridworld.grid.Location;
 

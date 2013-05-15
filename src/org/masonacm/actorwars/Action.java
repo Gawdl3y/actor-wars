@@ -1,6 +1,9 @@
 //TODO Provide distinction between target and performer in JavaDocs
 package org.masonacm.actorwars;
 
+import com.gawdl3y.util.DynamicValue;
+import com.gawdl3y.util.ModifiableBoolean;
+import com.gawdl3y.util.ModifiableInteger;
 import info.gridworld.actor.Actor;
 import info.gridworld.grid.Location;
 
@@ -126,7 +129,7 @@ public abstract class Action {
      * Turns the Actor to a direction
      * @param direction The direction to turn to
      * @return The resulting Action to use
-     * @see org.masonacm.actorwars.Action#turn(DynamicValue)
+     * @see org.masonacm.actorwars.Action#turn(com.gawdl3y.util.DynamicValue)
      */
     public static Action turn(final int direction) {
         return new Action() {
@@ -946,7 +949,7 @@ public abstract class Action {
      * Increments a ModifiableInteger
      * @param value The value to increment
      * @return The resulting Action to use
-     * @see org.masonacm.actorwars.Action#decrement(ModifiableInteger)
+     * @see org.masonacm.actorwars.Action#decrement(com.gawdl3y.util.ModifiableInteger)
      */
     public static Action increment(final ModifiableInteger value) {
         return new Action() {

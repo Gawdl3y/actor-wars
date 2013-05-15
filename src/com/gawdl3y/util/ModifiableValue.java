@@ -1,4 +1,4 @@
-package org.masonacm.actorwars;
+package com.gawdl3y.util;
 
 /**
  * A value that can be modified but still be the same instance

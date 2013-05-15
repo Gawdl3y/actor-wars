@@ -1,4 +1,4 @@
-package org.masonacm.actorwars;
+package com.gawdl3y.util;
 
 /**
  * A value that may change at any time (needs to be recalculated each time the value is obtained)

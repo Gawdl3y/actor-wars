@@ -1,4 +1,4 @@
-package org.masonacm.actorwars;
+package com.gawdl3y.util;
 
 /**
  * A simple wrapper class for an integer

@@ -1,5 +1,6 @@
 package org.masonacm.actorwars;
 
+import com.gawdl3y.util.ModifiableLocation;
 import info.gridworld.grid.Location;
 
 import java.awt.*;
