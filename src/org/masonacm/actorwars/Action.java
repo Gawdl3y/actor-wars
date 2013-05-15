@@ -230,6 +230,7 @@ public abstract class Action {
      * Does damage to the DestructibleActor in front of the ActiveActor by an amount of HP
      * @param health The amount of damage to deal
      * @return The resulting Action to use
+     * @see org.masonacm.actorwars.Action#attackEP(int)
      */
     public static Action attackHP(final int health) {
         return new Action() {
@@ -272,6 +273,7 @@ public abstract class Action {
      * Does damage to the DestructibleActor in front of the ActiveActor based on the amount of energy that it wants to spend
      * @param energy The amount of energy to use for the attack
      * @return The resulting Action to use
+     * @see org.masonacm.actorwars.Action#attackHP(int)
      */
     public static Action attackEP(final int energy) {
         return new Action() {
@@ -396,6 +398,7 @@ public abstract class Action {
      * Siphons the Actor's health into energy
      * @param health The amount of health to siphon into energy
      * @return The resulting Action to use
+     * @see org.masonacm.actorwars.Action#siphonSelfEP(int)
      */
     public static Action siphonSelfHP(final int health) {
         return new Action() {
@@ -433,6 +436,7 @@ public abstract class Action {
      * Siphons the Actor's health into energy, by the amount of energy it wishes to spend
      * @param energy The amount of energy to attempt to siphon health to
      * @return The resulting Action to use
+     * @see org.masonacm.actorwars.Action#siphonSelfHP(int)
      */
     public static Action siphonSelfEP(final int energy) {
         return new Action() {
