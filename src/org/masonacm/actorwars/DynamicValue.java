@@ -2,10 +2,10 @@ package org.masonacm.actorwars;
 
 /**
  * A value that may change at any time (needs to be recalculated each time the value is obtained)
- * @param <E> The type of the value
+ * @param <T> The type of the value
  * @author Schuyler Cebulskie
  */
-public abstract class DynamicValue<E> {
+public abstract class DynamicValue<T> {
     /**
      * Default constructor
      */
@@ -15,7 +15,7 @@ public abstract class DynamicValue<E> {
      * Get the value of the {@code DynamicValue}
      * @return The value of the {@code DynamicValue}
      */
-    public abstract E getValue();
+    public abstract T getValue();
 
     @Override
     public String toString() {

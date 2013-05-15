@@ -2,14 +2,14 @@ package org.masonacm.actorwars;
 
 /**
  * A value that can be modified but still be the same instance
- * @param <E> The type of the value
+ * @param <T> The type of the value
  * @author Schuyler Cebulskie
  */
-public class ModifiableValue<E> extends DynamicValue<E> {
+public class ModifiableValue<T> extends DynamicValue<T> {
     /**
      * The value of the {@code ModifiableValue}
      */
-    protected E value;
+    protected T value;
 
     /**
      * Default constructor
@@ -20,7 +20,7 @@ public class ModifiableValue<E> extends DynamicValue<E> {
      * Fill constructor
      * @param value The value for the {@code DynamicValue}
      */
-    public ModifiableValue(E value) {
+    public ModifiableValue(T value) {
         this.value = value;
     }
 
@@ -28,7 +28,7 @@ public class ModifiableValue<E> extends DynamicValue<E> {
      * Copy constructor
      * @param value The {@code DynamicValue} to copy from
      */
-    public ModifiableValue(DynamicValue<E> value) {
+    public ModifiableValue(DynamicValue<T> value) {
         this.value = value.getValue();
     }
 
@@ -36,7 +36,7 @@ public class ModifiableValue<E> extends DynamicValue<E> {
      * Sets the value
      * @param value The value to use
      */
-    public void setValue(E value) {
+    public void setValue(T value) {
         this.value = value;
     }
 
@@ -44,12 +44,12 @@ public class ModifiableValue<E> extends DynamicValue<E> {
      * Copies the value from a {@code DynamicValue}
      * @param value The {@code DynamicValue} to copy from
      */
-    public void setValue(DynamicValue<E> value) {
+    public void setValue(DynamicValue<T> value) {
         this.value = value.getValue();
     }
     
     @Override
-    public E getValue() {
+    public T getValue() {
         return value;
     }
 }
