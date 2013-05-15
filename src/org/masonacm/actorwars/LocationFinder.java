@@ -21,6 +21,7 @@ public class LocationFinder {
      * @return The Location of the nearest Actor to the Location
      */
     public static Location findClosestInstance(Location location, Class<?> c, Grid<Actor> grid) {
+        try{
         ArrayList<Location> locations = new ArrayList<Location>();
 
         // Find all instances
@@ -44,6 +45,10 @@ public class LocationFinder {
         }
 
         return locations.get(index);
+        }catch (Exception e)
+        {
+            return null;
+        }
     }
 
     /**
@@ -64,7 +69,7 @@ public class LocationFinder {
     public static DynamicValue<Location> findClosestEmptyAdjacentLocation(final Actor a, final DynamicValue<Location> location) {
         return new DynamicValue<Location>() {
             @Override
-            public Location getValue() {
+            public Location getValue() {try{
                 if(location == null) return null;
 
                 // Get all of the empty adjacent locations
@@ -87,6 +92,10 @@ public class LocationFinder {
                 }
 
                 return arrloc.get(index);
+            }catch (Exception e)
+            {
+                return null;
+            }
             }
         };
     }

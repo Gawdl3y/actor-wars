@@ -23,6 +23,7 @@ public class Pathfinder {
      * @return An ArrayList of Locations that form the path
      */
     public static ArrayList<Location> findPath(Location a, Location b, Grid<Actor> mygrid) {
+        try{
         //Location t = a;
    //     System.out.println("Pathfinder.nonmodif("+b+")");
         mgrid = mygrid;
@@ -38,10 +39,15 @@ public class Pathfinder {
         int ofc = mygrid.getNumCols() * mygrid.getNumRows();
         if(!mygrid.isValid(b)) return null;
     //    System.out.println("valid target");
-        if(mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable)) {
-   //         System.out.println("need to recalculate target");
-            b = LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a), new ModifiableLocation(b)).getValue();
+        while(ofc>0&&(mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable))) {
+            //         System.out.println("need to recalculate target");
+            b = (LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a), new ModifiableLocation(b)).getValue());
+            if(b==null)
+                b = b.getAdjacentLocation(b.getDirectionToward(a));
+            ofc--;
         }
+        if(ofc<=0) return null;
+        ofc = mygrid.getNumCols() * mygrid.getNumRows();
 
         if(b == null) return null;
      //   System.out.println("Target Finalized");
@@ -81,6 +87,10 @@ public class Pathfinder {
         mgrid = null;
         //    System.out.println("Pathfinder.findPathNonmodif(complete)");
         return al;
+    } catch (Exception e)
+    {
+        return null;
+    }
     }
     /**
      * Find a path to the specified Location using the A* algorithm
@@ -91,7 +101,9 @@ public class Pathfinder {
      */
     public static ArrayList<Location> findPath(Location a, ModifiableLocation b, Grid<Actor> mygrid) {
         //Location t = a;
+        int ofc = 0;
         //System.out.println("Pathfinder.findPathmodifiable("+b.getValue()+")");
+      try{
         mgrid = mygrid;
         //a = b;
         //b = t;
@@ -102,14 +114,29 @@ public class Pathfinder {
         if(mgrid == null) return null;
        //  System.out.println("Grid not null");
       //   System.out.println("All Parameters not null");
-        int ofc = mygrid.getNumCols() * mygrid.getNumRows();
+        ofc = mygrid.getNumCols() * mygrid.getNumRows();
         if(!mygrid.isValid(b.getValue())) return null;
       //    System.out.println("valid target");
-        if(mygrid.get(b.getValue()) != null && !(mygrid.get(b.getValue()) instanceof Passable)) {
+       // System.out.println("b:"+mygrid.get(b.getValue()));
+      } catch (Exception e)
+      {
+          return null;
+      }
+
+        try{
+        while(ofc>0&&(mygrid.get(b.getValue()) != null && !(mygrid.get(b.getValue()) instanceof Passable))) {
      //         System.out.println("need to recalculate target");
             b.setValue(LocationFinder.findClosestEmptyAdjacentLocation(mgrid.get(a), b).getValue());
+            if(b==null)
+                b.setValue(b.getValue().getAdjacentLocation(b.getValue().getDirectionToward(a)));
+        ofc--;
         }
-
+        if(ofc<=0) return null;
+        }catch (Exception e)
+        {
+            return null;
+        }
+        ofc = mygrid.getNumCols() * mygrid.getNumRows();
         if(b == null) return null;
        //  System.out.println("Target Finalized");
        // 	System.out.println("Pathfinder.findPath(Beginning calculations)");
