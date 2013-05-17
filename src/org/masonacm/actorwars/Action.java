@@ -358,10 +358,46 @@ public abstract class Action {
 
     /**
      * Heals the Actor
-     * @param energy Scale to heal by
+     * @param health Scale to heal by
      * @return The resulting Action to use
      */
-    public static Action healSelf(final int energy) {
+    public static Action healSelfHP(final int health) {
+        return new Action() {
+            @Override
+            protected void perform(ActiveActor a) {
+                if(getCost() <= a.energy) {
+                    a.damage(-(health),a);
+                    a.energy -= getCost();
+                } else {
+                    a.damage(health,a);
+                    a.energy = 0;
+                }
+
+            }
+
+            @Override
+            public int getCost() {
+                return (int) (Math.pow(health*6+7, 2)-49)/12;
+            }
+
+            @Override
+            public boolean isExclusive() {
+                return true;
+            }
+
+            @Override
+            public Object getData() {
+                return health;
+            }
+
+            @Override
+            public String toString() {
+                return "hp(" + health + ")";
+            }
+        };
+    }
+
+    public static Action healSelfEP(final int energy) {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
@@ -396,7 +432,6 @@ public abstract class Action {
             }
         };
     }
-
     /**
      * Siphons the Actor's health into energy
      * @param health The amount of health to siphon into energy
@@ -771,18 +806,18 @@ public abstract class Action {
                             Actor b = (Actor) e.newInstance();
                             b.putSelfInGrid(a.getGrid(), a.getLocation().getAdjacentLocation(a.getDirection()));
                         } catch(InstantiationException r) {
-                            r.printStackTrace();
+                            //r.printStackTrace();
                         } catch(IllegalAccessException r) {
-                            r.printStackTrace();
+                           // r.printStackTrace();
                         }
-                        a.energy = a.energy - 400;
+                        a.energy = a.energy - getCost();
                     }
                 }
             }
 
             @Override
             public int getCost() {
-                return 400;
+                return 600;
             }
 
             @Override
