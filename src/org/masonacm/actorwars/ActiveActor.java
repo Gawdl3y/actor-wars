@@ -1,6 +1,8 @@
 package org.masonacm.actorwars;
 
+import com.gawdl3y.util.DynamicValue;
 import info.gridworld.actor.Actor;
+import info.gridworld.grid.Location;
 
 /**
  * An Actor that can perform Actions
@@ -192,5 +194,18 @@ public abstract class ActiveActor extends DestructibleActor {
      */
     public int getEnergy() {
         return energy;
+    }
+
+    /**
+     * Creates a DynamicValue&lt;Location&gt; for this Actor's location
+     * @return A DynamicValue&lt;Location&gt; for this Actor's location
+     */
+    public DynamicValue<Location> getDynamicLocation() {
+        return new DynamicValue<Location>() {
+            @Override
+            public Location getValue() {
+                return getLocation();
+            }
+        };
     }
 }
