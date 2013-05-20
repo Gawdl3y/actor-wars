@@ -9,7 +9,7 @@ public class Inquisition extends Peon {
     public Inquisition(Location l) {
         setColor(Color.RED);
         setDirection(90);
-        add(Peon.moveToGradual(LocationFinder.findClosestEmptyAdjacentLocation(this, new ModifiableLocation(l))));
+        add(Peon.moveToGradual(LocationFinder.findClosestEmptyAdjacentDynamicLocation(getDynamicLocation(), new ModifiableLocation(l), getGrid())));
         add(Action.halt());
         add(Action.say("Nobody expects the Spanish Inquisition!"));
     }

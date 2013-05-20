@@ -16,23 +16,25 @@ public class LocationFinder {
     /**
      * Finds the Location of the nearest Actor that is an instance of a specified class
      * @param location The Location to find the closest to
-     * @param c        The class to check the instance of
+     * @param clazz    The class to check the instance of
      * @param grid     The grid to search on
      * @return The Location of the nearest Actor to the Location
      */
-    public static Location findClosestInstance(Location location, Class<?> c, Grid<Actor> grid) {
-        try{
+    public static Location findClosestInstanceLocation(final Location location, final Class<?> clazz, final Grid<Actor> grid) {
+        if(location == null) throw new IllegalArgumentException("The location cannot be null");
+        if(clazz == null) throw new IllegalArgumentException("The class cannot be null");
+        if(grid == null) throw new IllegalArgumentException("The grid cannot be null");
+
         ArrayList<Location> locations = new ArrayList<Location>();
 
         // Find all instances
         for(int row = 0; row < grid.getNumRows(); row++) {
             for(int col = 0; col < grid.getNumCols(); col++) {
-                if(c.isInstance(grid.get(new Location(row, col)))) {
+                if(clazz.isInstance(grid.get(new Location(row, col)))) {
                     locations.add(new Location(row, col));
                 }
             }
         }
-
         if(locations.size() == 0) return null;
 
         // Find the one with the lowest distance
@@ -43,59 +45,133 @@ public class LocationFinder {
                 min = Math.abs(l.getRow() - location.getRow()) + Math.abs(l.getCol() - location.getCol());
             }
         }
-
         return locations.get(index);
-        }catch (Exception e)
-        {
-            return null;
-        }
     }
 
     /**
      * Finds the Location of the nearest Actor that is an instance of a specified class
-     * @param actor The Actor to find the closest to
-     * @param c     The class to check the instance of
-     * @return The Location of the nearest other Actor to the Actor
+     * @param location The Location to find the closest to
+     * @param clazz    The class to check the instance of
+     * @param grid     The grid to search on
+     * @return The Location of the nearest Actor to the Location
      */
-    public static Location findClosestInstance(Actor actor, Class<?> c) {
-        return findClosestInstance(actor.getLocation(), c, actor.getGrid());
+    public static Location findClosestInstanceLocation(final DynamicValue<Location> location, final Class<?> clazz, final Grid<Actor> grid) {
+        if(location == null) throw new IllegalArgumentException("The location cannot be null");
+        return findClosestInstanceLocation(location.getValue(), clazz, grid);
     }
 
     /**
-     * Find the closest empty adjacent Location to a Location
+     * Finds the Location of the nearest Actor that is an instance of a specified class
      * @param location The Location to find the closest to
-     * @return The closest empty adjacent Location to the provided Location
+     * @param clazz    The class to check the instance of
+     * @param grid     The grid to search on
+     * @return The Location of the nearest Actor to the Location, as a DynamicValue&lt;Location&gt;
      */
-    public static DynamicValue<Location> findClosestEmptyAdjacentLocation(final Actor a, final DynamicValue<Location> location) {
+    public static DynamicValue<Location> findClosestInstanceDynamicLocation(final Location location, final Class<?> clazz, final Grid<Actor> grid) {
+        if(location == null) throw new IllegalArgumentException("The location cannot be null");
+        if(clazz == null) throw new IllegalArgumentException("The class cannot be null");
+        if(grid == null) throw new IllegalArgumentException("The grid cannot be null");
+
         return new DynamicValue<Location>() {
             @Override
-            public Location getValue() {try{
-                if(location == null) return null;
-
-                // Get all of the empty adjacent locations
-                ArrayList<Location> arrloc;
-                try {
-                    arrloc = a.getGrid().getEmptyAdjacentLocations(location.getValue());
-                } catch(NullPointerException n) {
-                    return null;
-                }
-
-                if(arrloc == null || arrloc.size() == 0) return null;
-
-                // Find the closest one
-                int min = a.getGrid().getNumCols() + a.getGrid().getNumRows(), index = 0;
-                for(Location l : arrloc) {
-                    if(Math.abs(l.getRow() - a.getLocation().getRow()) + Math.abs(l.getCol() - a.getLocation().getCol()) < min) {
-                        index = arrloc.indexOf(l);
-                        min = Math.abs(l.getRow() - a.getLocation().getRow()) + Math.abs(l.getCol() - a.getLocation().getCol());
-                    }
-                }
-
-                return arrloc.get(index);
-            }catch (Exception e)
-            {
-                return null;
+            public Location getValue() {
+                return findClosestInstanceLocation(location, clazz, grid);
             }
+        };
+    }
+
+    /**
+     * Finds the Location of the nearest Actor that is an instance of a specified class
+     * @param location The Location to find the closest to
+     * @param clazz    The class to check the instance of
+     * @param grid     The grid to search on
+     * @return The Location of the nearest Actor to the Location, as a DynamicValue&lt;Location&gt;
+     */
+    public static DynamicValue<Location> findClosestInstanceDynamicLocation(final DynamicValue<Location> location, final Class<?> clazz, final Grid<Actor> grid) {
+        if(location == null) throw new IllegalArgumentException("The location cannot be null");
+        if(clazz == null) throw new IllegalArgumentException("The class cannot be null");
+        if(grid == null) throw new IllegalArgumentException("The grid cannot be null");
+
+        return new DynamicValue<Location>() {
+            @Override
+            public Location getValue() {
+                return findClosestInstanceLocation(location.getValue(), clazz, grid);
+            }
+        };
+    }
+
+    /**
+     * Find the empty location that is adjacent to the second location and is closest to the first
+     * @param location1 The location to get the closest to
+     * @param location2 The location to get the empty adjacent from
+     * @param grid      The grid to search on
+     * @return The empty location that is adjacent to the second location and is closest to the first
+     */
+    public static Location findClosestEmptyAdjacentLocation(final Location location1, final Location location2, final Grid<Actor> grid) {
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("The locations cannot be null");
+        if(grid == null) throw new IllegalArgumentException("The grid cannot be null");
+
+        // Get all of the empty adjacent locations
+        ArrayList<Location> locations = grid.getEmptyAdjacentLocations(location2);
+        if(locations == null) return null;
+
+        // Find the closest
+        Location closest = null;
+        int min = grid.getNumCols() + grid.getNumRows(), current;
+        for(Location l : locations) {
+            current = Math.abs(l.getRow() - location1.getRow()) + Math.abs(l.getCol() - location1.getCol());
+            if(current < min) {
+                closest = l;
+                min = current;
+            }
+        }
+        return closest;
+    }
+
+    /**
+     * Find the empty location that is adjacent to the second location and is closest to the first
+     * @param location1 The location to get the closest to
+     * @param location2 The location to get the empty adjacent from
+     * @param grid      The grid to search on
+     * @return The empty location that is adjacent to the second location and is closest to the first
+     */
+    public static Location findClosestEmptyAdjacentLocation(final DynamicValue<Location> location1, final DynamicValue<Location> location2, final Grid<Actor> grid) {
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("The locations cannot be null");
+        return findClosestEmptyAdjacentLocation(location1.getValue(), location2.getValue(), grid);
+    }
+
+    /**
+     * Find the empty location that is adjacent to the second location and is closest to the first
+     * @param location1 The location to get the closest to
+     * @param location2 The location to get the empty adjacent from
+     * @param grid      The grid to search on
+     * @return The empty location that is adjacent to the second location and is closest to the first, as a DynamicValue&lt;Location&gt;
+     */
+    public static DynamicValue<Location> findClosestEmptyAdjacentDynamicLocation(final Location location1, final Location location2, final Grid<Actor> grid) {
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("The locations cannot be null");
+        if(grid == null) throw new IllegalArgumentException("The grid cannot be null");
+        return new DynamicValue<Location>() {
+            @Override
+            public Location getValue() {
+                return findClosestEmptyAdjacentLocation(location1, location2, grid);
+            }
+        };
+    }
+
+    /**
+     * Find the empty location that is adjacent to the second location and is closest to the first
+     * @param location1 The location to get the closest to
+     * @param location2 The location to get the empty adjacent from
+     * @param grid      The grid to search on
+     * @return The empty location that is adjacent to the second location and is closest to the first, as a DynamicValue&lt;Location&gt;
+     */
+    public static DynamicValue<Location> findClosestEmptyAdjacentDynamicLocation(final DynamicValue<Location> location1, final DynamicValue<Location> location2, final Grid<Actor> grid) {
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("The locations cannot be null");
+        if(grid == null) throw new IllegalArgumentException("The grid cannot be null");
+        return new DynamicValue<Location>() {
+            @Override
+            public Location getValue() {
+                return findClosestEmptyAdjacentLocation(location1.getValue(), location2.getValue(), grid);
             }
         };
     }
@@ -106,47 +182,50 @@ public class LocationFinder {
      * @param location2 The second Location
      * @return The direction from the Actor to the Location
      */
-    public static DynamicValue<Integer> directionTo(final DynamicValue<Location> location1, final DynamicValue<Location> location2) {
+    public static int directionTo(final Location location1, final Location location2) {
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("The locations cannot be null");
+        return location1.getDirectionToward(location2);
+    }
+
+    /**
+     * Gets the direction from a Location to another Location
+     * @param location1 The first Location
+     * @param location2 The second Location
+     * @return The direction from the Actor to the Location
+     */
+    public static int directionTo(final DynamicValue<Location> location1, final DynamicValue<Location> location2) {
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("The locations cannot be null");
+        return location1.getValue().getDirectionToward(location2.getValue());
+    }
+
+    /**
+     * Gets the direction from a Location to another Location
+     * @param location1 The first Location
+     * @param location2 The second Location
+     * @return The direction from the Actor to the Location, as a DynamicValue&lt;Integer&gt;
+     */
+    public static DynamicValue<Integer> dynamicDirectionTo(final Location location1, final Location location2) {
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("The locations cannot be null");
         return new DynamicValue<Integer>() {
             @Override
             public Integer getValue() {
-                if(location1 == null || location1.getValue() == null || location2 == null || location2.getValue() == null)
-                    return 0;
+                return location1.getDirectionToward(location2);
+            }
+        };
+    }
+
+    /**
+     * Gets the direction from a Location to another Location
+     * @param location1 The first Location
+     * @param location2 The second Location
+     * @return The direction from the Actor to the Location, as a DynamicValue&lt;Integer&gt;
+     */
+    public static DynamicValue<Integer> dynamicDirectionTo(final DynamicValue<Location> location1, final DynamicValue<Location> location2) {
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("The locations cannot be null");
+        return new DynamicValue<Integer>() {
+            @Override
+            public Integer getValue() {
                 return location1.getValue().getDirectionToward(location2.getValue());
-            }
-        };
-    }
-
-    /**
-     * Gets the direction from an Actor to a Location
-     * @param actor    The Actor
-     * @param location The Location
-     * @return The direction from the Actor to the Location
-     */
-    public static DynamicValue<Integer> directionTo(final Actor actor, final DynamicValue<Location> location) {
-        return new DynamicValue<Integer>() {
-            @Override
-            public Integer getValue() {
-                if(actor == null || actor.getLocation() == null) return 0;
-                if(location == null || location.getValue() == null) return 0;
-                return actor.getLocation().getDirectionToward(location.getValue());
-            }
-        };
-    }
-
-    /**
-     * Gets the direction from an Actor to another Actor
-     * @param actor1 The first Actor
-     * @param actor2 The second Actor
-     * @return The direction from the Actor to the Location
-     */
-    public static DynamicValue<Integer> directionTo(final Actor actor1, final Actor actor2) {
-        return new DynamicValue<Integer>() {
-            @Override
-            public Integer getValue() {
-                if(actor1 == null || actor1.getLocation() == null) return 0;
-                if(actor2 == null || actor2.getLocation() == null) return 0;
-                return actor1.getLocation().getDirectionToward(actor2.getLocation());
             }
         };
     }
