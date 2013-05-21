@@ -41,7 +41,7 @@ public class Pathfinder {
             //    System.out.println("valid target");
             while(ofc > 0 && (mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable))) {
                 //         System.out.println("need to recalculate target");
-                b = LocationFinder.findClosestEmptyAdjacentLocation(new ModifiableLocation(mgrid.get(a).getLocation()), new ModifiableLocation(b), mgrid);
+                b = LocationFinder.findClosestEmptyAdjacentDynamicLocation(new ModifiableLocation(mgrid.get(a).getLocation()), new ModifiableLocation(b), mgrid).getValue();
                 if(b == null)
                     b = b.getAdjacentLocation(b.getDirectionToward(a));
                 ofc--;

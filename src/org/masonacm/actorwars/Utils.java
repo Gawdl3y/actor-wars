@@ -17,7 +17,7 @@ public final class Utils {
      * @param location The Location to test at
      * @return Whether or not the Actor specified is at the DynamicValue&lt;Location&gt;
      */
-    public static ModifiableBoolean atLocation(final Actor actor, final DynamicValue<Location> location) {
+    public static DynamicValue<Boolean> atLocation(final Actor actor, final DynamicValue<Location> location) {
         return new ModifiableBoolean() {
             @Override
             public Boolean getValue() {
@@ -32,7 +32,7 @@ public final class Utils {
      * @param location The Location to test at
      * @return Whether or not the Actor specified is at the DynamicValue&lt;Location&gt;
      */
-    public static ModifiableBoolean notAtLocation(final Actor actor, final DynamicValue<Location> location) {
+    public static DynamicValue<Boolean> notAtLocation(final Actor actor, final DynamicValue<Location> location) {
         return new ModifiableBoolean() {
             @Override
             public Boolean getValue() {
