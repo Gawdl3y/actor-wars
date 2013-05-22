@@ -102,7 +102,6 @@ public abstract class Peon extends ActiveActor {
      * @param location The location to pathfind to
      */
     public static final Action moveToGradual(final DynamicValue<Location> location) {
-        //	System.out.println("Peon.moveToGradual()");
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
@@ -117,12 +116,12 @@ public abstract class Peon extends ActiveActor {
                     if(path == null) return;
 
                     DynamicValue<Location> temp = a.getDynamicLocation();
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Peon.moveToGradual(new ModifiableLocation(target))));
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Action.move()));
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, new ModifiableLocation(target)), Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableLocation(target)))));
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Peon.moveToGradual(target)));
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.move()));
+                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), target))));
                     while(path.size() > 0) {
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, new ModifiableLocation(temp)), move()));
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, new ModifiableLocation(temp)), turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableLocation(path.get(path.size() - 1))))));
+                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), move()));
+                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableLocation(path.get(path.size() - 1))))));
                         temp = new ModifiableLocation(path.remove(path.size() - 1));
                     }
                 }
