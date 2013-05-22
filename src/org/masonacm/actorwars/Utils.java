@@ -1,7 +1,6 @@
 package org.masonacm.actorwars;
 
 import com.gawdl3y.util.DynamicValue;
-import com.gawdl3y.util.ModifiableBoolean;
 import info.gridworld.actor.Actor;
 import info.gridworld.grid.Location;
 
@@ -18,7 +17,7 @@ public final class Utils {
      * @return Whether or not the Actor specified is at the DynamicValue&lt;Location&gt;
      */
     public static DynamicValue<Boolean> atLocation(final Actor actor, final DynamicValue<Location> location) {
-        return new ModifiableBoolean() {
+        return new DynamicValue<Boolean>() {
             @Override
             public Boolean getValue() {
                 return actor.getLocation().equals(location.getValue());
@@ -33,7 +32,7 @@ public final class Utils {
      * @return Whether or not the Actor specified is at the DynamicValue&lt;Location&gt;
      */
     public static DynamicValue<Boolean> notAtLocation(final Actor actor, final DynamicValue<Location> location) {
-        return new ModifiableBoolean() {
+        return new DynamicValue<Boolean>() {
             @Override
             public Boolean getValue() {
                 //if(!actor.getLocation().equals(location.getValue())) System.out.println("I'm not there "+location);

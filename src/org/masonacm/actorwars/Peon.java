@@ -106,7 +106,7 @@ public abstract class Peon extends ActiveActor {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
-            Location temp = null;
+                Location temp = null;
                 if(location == null) return;
              //   System.out.println("Ive got location: "+location);
                 ModifiableLocation target = new ModifiableLocation(location.getValue());
