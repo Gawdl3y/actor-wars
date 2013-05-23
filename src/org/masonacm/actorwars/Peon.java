@@ -7,10 +7,10 @@ import com.gawdl3y.util.ModifiableValue;
 import info.gridworld.grid.Location;
 
 import java.util.ArrayList;
-
+import java.util.Collection;
 
 public abstract class Peon extends ActiveActor {
-    public ArrayList<Action> myactions;
+    private ArrayList<Action> actions;
 
     /**
      * This method is equivalent to act(), extend this when making a Peon. It is called once per tick, just like the act() function
@@ -19,34 +19,141 @@ public abstract class Peon extends ActiveActor {
 
     public Peon() {
         super(100);//Peons have 100 energy to start with.
-        myactions = new ArrayList<Action>();
+        actions = new ArrayList<Action>();
     }
 
     /**
-     * Adds Action [a] to bottom of this Peon's Action que
-     * @param a The Action to add
+     * Adds an Action to the end of the Action queue
+     * @param action The Action to add
+     * @return true
      */
-    public final void add(Action a) {
-        myactions.add(a);
+    protected final boolean addAction(Action action) {
+        return actions.add(action);
+    }
+
+    /**
+     * Adds an Action at a specific position in the Action queue
+     * @param index  The position to place the Action at
+     * @param action The Action to add
+     */
+    protected final void addAction(int index, Action action) {
+        actions.add(index, action);
+    }
+
+    /**
+     * Adds a Collection of Actions to the end of the Action queue
+     * @param actions The Collection of Actions to add
+     * @return true if the Action queue changed
+     */
+    protected final boolean addActions(Collection<Action> actions) {
+        return this.actions.addAll(actions);
+    }
+
+    /**
+     * Adds a Collection of Actions at a specified position in the Action queue
+     * @param index   The position to add the actions at
+     * @param actions The Collection of Actions to add
+     * @return true if the Action queue changed
+     */
+    protected final boolean addActions(int index, Collection<Action> actions) {
+        return this.actions.addAll(index, actions);
+    }
+
+    /**
+     * Removes an Action from the Action queue
+     * @param action The Action to remove
+     * @return true if the Action queue contained the Action
+     */
+    protected final boolean removeAction(Action action) {
+        return actions.remove(action);
+    }
+
+    /**
+     * Removes an Action from the Action queue
+     * @param index The position of the Action to remove
+     * @return The removed Action
+     */
+    protected final Action removeAction(int index) {
+        return actions.remove(index);
+    }
+
+    /**
+     * Removes a Collection of Actions from the Action queue
+     * @param actions The Collection of Actions to remove
+     * @return true if the Action queue contained the Actions
+     */
+    protected final boolean removeActions(Collection<Action> actions) {
+        return this.actions.removeAll(actions);
+    }
+
+    /**
+     * Clears the Action queue
+     */
+    protected final void clearActions() {
+        actions.clear();
+    }
+
+    /**
+     * Tests if the Action queue contains an Action
+     * @param action The Action to test for
+     * @return true if the Action queue contains the specified Action instance
+     */
+    protected final boolean containsAction(Action action) {
+        return actions.contains(action);
+    }
+
+    /**
+     * Tests if the Action queue contains any Actions
+     * @return true if the Action queue isn't empty
+     */
+    protected final boolean hasActions() {
+        return !actions.isEmpty();
+    }
+
+    /**
+     * Gets the Action at the specified position of the Action queue
+     * @param index The position of the Action to retrieve
+     * @return
+     */
+    protected final Action getAction(int index) {
+        return actions.get(index);
+    }
+
+    /**
+     * Sets the Action at a specified position in the Action queue
+     * @param index  The position of the Action to set
+     * @param action The Action to replace it with
+     * @return The old Action
+     */
+    protected final Action setAction(int index, Action action) {
+        return actions.set(index, action);
+    }
+
+    /**
+     * Gets the number of Actions in the Action queue
+     * @return The number of Actions in the Action queue
+     */
+    protected final int getActionCount() {
+        return actions.size();
+    }
+
+    /**
+     * Gets the Action queue
+     * @return The Action queue
+     */
+    protected final ArrayList<Action> getActions() {
+        return actions;
     }
 
     /**
      * This method is is called once per tick to do the overhead for the Peon class (it is automatic)
      */
     public final void activeAct() {
-
         peonAct();
-      //  System.out.println("Action Que pre execute:"+myactions);
-      //  System.out.println("Action Que hasactedpre:" + hasActed());
-        while(myactions.contains(null))
-            myactions.remove(null);
-        while(myactions.size() > 0) {
-            if((!hasActed() && myactions.get(0).isExclusive()) || !myactions.get(0).isExclusive()) {
-                //System.out.println("peon.actvact(Action to preform): "+myactions.get(0).getClass().getName());
-               // System.out.println("Preforming:" + myactions.get(0));
-                perform(myactions.remove(0));
-             //   System.out.println("Action Que post execute:"+myactions);
-             //   System.out.println("Action Que post hasacted:" + hasActed());
+        while(actions.contains(null)) actions.remove(null);
+        while(actions.size() > 0) {
+            if((!hasActed() && actions.get(0).isExclusive()) || !actions.get(0).isExclusive()) {
+                perform(actions.remove(0));
             } else {
                 break;
             }
@@ -56,7 +163,7 @@ public abstract class Peon extends ActiveActor {
     @Override
     public String toString() {
         String s = this.getClass().getName() + "\n";
-        s = s + "INV:" + this.myinv.toString() + "\nACTS:" + this.myactions.toString() + "\nHEALTH:" + getHealth() + "\nENERGY:" + getEnergy();
+        s = s + "INV:" + this.myinv.toString() + "\nACTS:" + this.actions.toString() + "\nHEALTH:" + getHealth() + "\nENERGY:" + getEnergy();
         return s;
     }
 
@@ -78,8 +185,7 @@ public abstract class Peon extends ActiveActor {
                 }
                 myc--;
                 System.out.println("Counting:" + (c - myc));
-                if(myc > 0)
-                    ((Peon) a).myactions.add(0, this);
+                if(myc > 0) ((Peon) a).actions.add(0, this);
             }
 
             @Override
@@ -112,7 +218,6 @@ public abstract class Peon extends ActiveActor {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
-                //System.out.println("We're pathing");
                 if(location == null) return;
                 if(a == null) return;
                 if(a.getLocation() == null) return;
@@ -124,18 +229,12 @@ public abstract class Peon extends ActiveActor {
                     if(path == null) return;
 
                     DynamicValue<Location> temp;
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Peon.moveToGradual(target)));
-                   // ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.move()));
-                  //  ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), target))));
+                    ((Peon) a).actions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Peon.moveToGradual(target)));
                     while(path.size() > 0) {
                         temp = (path.size()>1)? (new ModifiableValue<Location>(path.get(path.size()-2))):(a.getDynamicLocation());
-                        //((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, temp), Action.say("I failed")));
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), Action.move()));
-                       // ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), Action.say(":" + path.size())));
-
-                        ((Peon) a).myactions.add(0,Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableValue<Location>(path.get(path.size() - 1)))));
-
-                           path.remove(path.size()-1) ;
+                        ((Peon) a).actions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), Action.move()));
+                        ((Peon) a).actions.add(0, Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableValue<Location>(path.get(path.size() - 1)))));
+                        path.remove(path.size()-1) ;
                     }
                 }
             }
@@ -172,8 +271,8 @@ public abstract class Peon extends ActiveActor {
             @Override
             protected void perform(ActiveActor a) {
                 if(b.getValue()) {
-                    ((Peon) a).myactions.add(0, this);
-                    ((Peon) a).myactions.add(0, myact);
+                    ((Peon) a).actions.add(0, this);
+                    ((Peon) a).actions.add(0, myact);
                 }
             }
 
@@ -210,7 +309,7 @@ public abstract class Peon extends ActiveActor {
             @Override
             protected void perform(ActiveActor a) {
                 if(b.getValue()) {
-                    ((Peon) a).myactions.add(0, ifaction);
+                    ((Peon) a).actions.add(0, ifaction);
                 }
 
             }
@@ -222,7 +321,7 @@ public abstract class Peon extends ActiveActor {
 
             @Override
             public boolean isExclusive() {
-                return false;//b.getValue()&&ifaction.isExclusive();
+                return false;
             }
 
             @Override
@@ -249,10 +348,10 @@ public abstract class Peon extends ActiveActor {
             @Override
             protected void perform(ActiveActor a) {
                 if(b.getValue()) {
-                    ((Peon) a).myactions.add(0, ifaction);
+                    ((Peon) a).actions.add(0, ifaction);
                 } else {
                     if(elseaction != null) {
-                        ((Peon) a).myactions.add(0, elseaction);
+                        ((Peon) a).actions.add(0, elseaction);
                     }
                 }
 
@@ -265,7 +364,7 @@ public abstract class Peon extends ActiveActor {
 
             @Override
             public boolean isExclusive() {
-                return false;//(b.getValue()&&ifaction.isExclusive())||(!b.getValue()&&elseaction.isExclusive());
+                return false;
             }
 
             @Override
@@ -291,9 +390,9 @@ public abstract class Peon extends ActiveActor {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
-                ((Peon) a).myactions.add(0, place(e));
-                ((Peon) a).myactions.add(0, turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableValue<Location>(l))));
-                ((Peon) a).myactions.add(0, Peon.moveToGradual(LocationFinder.findClosestEmptyAdjacentDynamicLocation(a.getDynamicLocation(), new ModifiableValue<Location>(l), a.getGrid())));
+                ((Peon) a).actions.add(0, place(e));
+                ((Peon) a).actions.add(0, turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableValue<Location>(l))));
+                ((Peon) a).actions.add(0, Peon.moveToGradual(LocationFinder.findClosestEmptyAdjacentDynamicLocation(a.getDynamicLocation(), new ModifiableValue<Location>(l), a.getGrid())));
             }
 
             @Override

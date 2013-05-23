@@ -14,7 +14,7 @@ public class HolyHandGrenadeBearer extends Peon {
     @Override
     public void peonAct() {
         if(charging && isFacingValidLocation()) {
-            if(!isFacing(Actor.class)) add(Action.move());
+            if(!isFacing(Actor.class)) addAction(Action.move());
             else charging = false;
         }
 
@@ -23,8 +23,8 @@ public class HolyHandGrenadeBearer extends Peon {
             removeSelfFromGrid();
             System.out.println("Boom!");
         } else if(!isFacingValidLocation()) {
-            myactions.clear();
-        } else if(myactions.size() == 0) {
+            clearActions();
+        } else if(getActionCount() == 0) {
             setDirection(getDirection() + 45);
         }
     }

@@ -20,7 +20,6 @@ public final class Utils {
         return new DynamicValue<Boolean>() {
             @Override
             public Boolean getValue() {
-               // if(actor.getLocation().equals(location.getValue())) System.out.println("I'm where i should be");
                 return actor.getLocation().equals(location.getValue());
             }
         };
@@ -36,7 +35,6 @@ public final class Utils {
         return new DynamicValue<Boolean>() {
             @Override
             public Boolean getValue() {
-                //if(!actor.getLocation().equals(location.getValue())) System.out.println("I'm not there "+location);
                 return !actor.getLocation().equals(location.getValue());
             }
         };
