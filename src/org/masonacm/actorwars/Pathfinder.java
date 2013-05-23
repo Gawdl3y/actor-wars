@@ -178,6 +178,9 @@ public class Pathfinder {
         }
         mgrid = null;
         //         System.out.println("Pathfinder.findPath(complete)");
+        if(al.size()>1)
+        if(al.get(0).getDirectionToward(a.getValue())==al.get(0).getDirectionToward(al.get(1)))
+        al.remove(0);
         return al;
     }
 
