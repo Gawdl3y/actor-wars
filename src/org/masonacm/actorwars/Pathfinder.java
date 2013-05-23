@@ -1,6 +1,8 @@
 package org.masonacm.actorwars;
 
+import com.gawdl3y.util.DynamicValue;
 import com.gawdl3y.util.ModifiableLocation;
+import com.gawdl3y.util.ModifiableValue;
 import info.gridworld.actor.Actor;
 import info.gridworld.grid.Grid;
 import info.gridworld.grid.Location;
@@ -41,7 +43,7 @@ public class Pathfinder {
             //    System.out.println("valid target");
             while(ofc > 0 && (mygrid.get(b) != null && !(mygrid.get(b) instanceof Passable))) {
                 //         System.out.println("need to recalculate target");
-                b = LocationFinder.findClosestEmptyAdjacentDynamicLocation(new ModifiableLocation(mgrid.get(a).getLocation()), new ModifiableLocation(b), mgrid).getValue();
+                b = LocationFinder.findClosestEmptyAdjacentDynamicLocation(new ModifiableValue<Location>(mgrid.get(a).getLocation()), new ModifiableValue<Location>(b), mgrid).getValue();
                 if(b == null)
                     b = b.getAdjacentLocation(b.getDirectionToward(a));
                 ofc--;
@@ -99,7 +101,7 @@ public class Pathfinder {
      * @param mygrid The grid
      * @return An ArrayList of Locations that form the path
      */
-    public static ArrayList<Location> findPath(Location a, ModifiableLocation b, Grid<Actor> mygrid) {
+    public static ArrayList<Location> findPath(DynamicValue<Location> a, ModifiableValue<Location> b, Grid<Actor> mygrid) {
         //Location t = a;
         int ofc = 0;
         //System.out.println("Pathfinder.findPathmodifiable("+b.getValue()+")");
@@ -125,9 +127,9 @@ public class Pathfinder {
         try {
             while(ofc > 0 && (mygrid.get(b.getValue()) != null && !(mygrid.get(b.getValue()) instanceof Passable))) {
                 //         System.out.println("need to recalculate target");
-                b.setValue(LocationFinder.findClosestEmptyAdjacentLocation(new ModifiableLocation(mgrid.get(a).getLocation()), b, mgrid));
+                b.setValue(LocationFinder.findClosestEmptyAdjacentLocation(new ModifiableValue<Location>(mgrid.get(a.getValue()).getLocation()), b, mgrid));
                 if(b == null)
-                    b.setValue(b.getValue().getAdjacentLocation(b.getValue().getDirectionToward(a)));
+                    b.setValue(b.getValue().getAdjacentLocation(b.getValue().getDirectionToward(a.getValue())));
                 ofc--;
             }
             if(ofc <= 0) return null;
@@ -139,7 +141,7 @@ public class Pathfinder {
         //  System.out.println("Target Finalized");
         // 	System.out.println("Pathfinder.findPath(Beginning calculations)");
         ArrayList<Spot> p = new ArrayList<Spot>();
-        p.add(new Spot(a));
+        p.add(new Spot(a.getValue()));
         while(!p.contains(b.getValue()) && ofc > 0) {
             //       System.out.println("Thinkingmodif:"+ofc);
             ofc--;
@@ -147,7 +149,7 @@ public class Pathfinder {
             for(Location q : mygrid.getValidAdjacentLocations(getLowest(p))) {
                 Spot l = new Spot(q);
                 if(!p.contains(l)) {
-                    p.add(new Spot(l, p.indexOf(getLowest(p)), b.getRow(), b.getCol()));
+                    p.add(new Spot(l, p.indexOf(getLowest(p)), b.getValue().getRow(), b.getValue().getCol()));
                     if(!(p.get(p.size() - 1)).isNull()) {
                         p.remove(p.size() - 1);
                     }

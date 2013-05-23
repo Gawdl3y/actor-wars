@@ -3,6 +3,7 @@ package org.masonacm.actorwars;
 import com.gawdl3y.util.DynamicValue;
 import com.gawdl3y.util.ModifiableBoolean;
 import com.gawdl3y.util.ModifiableLocation;
+import com.gawdl3y.util.ModifiableValue;
 import info.gridworld.grid.Location;
 
 import java.util.ArrayList;
@@ -33,13 +34,19 @@ public abstract class Peon extends ActiveActor {
      * This method is is called once per tick to do the overhead for the Peon class (it is automatic)
      */
     public final void activeAct() {
+
         peonAct();
+      //  System.out.println("Action Que pre execute:"+myactions);
+      //  System.out.println("Action Que hasactedpre:" + hasActed());
         while(myactions.contains(null))
             myactions.remove(null);
         while(myactions.size() > 0) {
             if((!hasActed() && myactions.get(0).isExclusive()) || !myactions.get(0).isExclusive()) {
                 //System.out.println("peon.actvact(Action to preform): "+myactions.get(0).getClass().getName());
+               // System.out.println("Preforming:" + myactions.get(0));
                 perform(myactions.remove(0));
+             //   System.out.println("Action Que post execute:"+myactions);
+             //   System.out.println("Action Que post hasacted:" + hasActed());
             } else {
                 break;
             }
@@ -105,6 +112,7 @@ public abstract class Peon extends ActiveActor {
         return new Action() {
             @Override
             protected void perform(ActiveActor a) {
+                //System.out.println("We're pathing");
                 if(location == null) return;
                 if(a == null) return;
                 if(a.getLocation() == null) return;
@@ -112,17 +120,22 @@ public abstract class Peon extends ActiveActor {
 
                 ModifiableLocation target = new ModifiableLocation(location.getValue());
                 if(!target.getValue().equals(a.getLocation())) {
-                    ArrayList<Location> path = Pathfinder.findPath(a.getLocation(), target, a.getGrid());
+                    ArrayList<Location> path = Pathfinder.findPath(a.getDynamicLocation(), target, a.getGrid());
                     if(path == null) return;
 
-                    DynamicValue<Location> temp = a.getDynamicLocation();
+                    DynamicValue<Location> temp;
                     ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Peon.moveToGradual(target)));
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.move()));
-                    ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), target))));
+                   // ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.move()));
+                  //  ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), target))));
                     while(path.size() > 0) {
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), move()));
-                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableLocation(path.get(path.size() - 1))))));
-                        temp = new ModifiableLocation(path.remove(path.size() - 1));
+                        temp = (path.size()>1)? (new ModifiableValue<Location>(path.get(path.size()-2))):(a.getDynamicLocation());
+                        //((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, temp), Action.say("I failed")));
+                        ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), Action.move()));
+                       // ((Peon) a).myactions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), Action.say(":" + path.size())));
+
+                        ((Peon) a).myactions.add(0,Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableValue<Location>(path.get(path.size() - 1)))));
+
+                           path.remove(path.size()-1) ;
                     }
                 }
             }
@@ -209,7 +222,7 @@ public abstract class Peon extends ActiveActor {
 
             @Override
             public boolean isExclusive() {
-                return false;
+                return false;//b.getValue()&&ifaction.isExclusive();
             }
 
             @Override
@@ -252,7 +265,7 @@ public abstract class Peon extends ActiveActor {
 
             @Override
             public boolean isExclusive() {
-                return false;
+                return false;//(b.getValue()&&ifaction.isExclusive())||(!b.getValue()&&elseaction.isExclusive());
             }
 
             @Override
@@ -279,8 +292,8 @@ public abstract class Peon extends ActiveActor {
             @Override
             protected void perform(ActiveActor a) {
                 ((Peon) a).myactions.add(0, place(e));
-                ((Peon) a).myactions.add(0, turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableLocation(l))));
-                ((Peon) a).myactions.add(0, Peon.moveToGradual(LocationFinder.findClosestEmptyAdjacentDynamicLocation(a.getDynamicLocation(), new ModifiableLocation(l), a.getGrid())));
+                ((Peon) a).myactions.add(0, turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableValue<Location>(l))));
+                ((Peon) a).myactions.add(0, Peon.moveToGradual(LocationFinder.findClosestEmptyAdjacentDynamicLocation(a.getDynamicLocation(), new ModifiableValue<Location>(l), a.getGrid())));
             }
 
             @Override
