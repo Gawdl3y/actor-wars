@@ -1,7 +1,6 @@
 package org.masonacm.actorwars;
 
 import com.gawdl3y.util.DynamicValue;
-import com.gawdl3y.util.ModifiableLocation;
 import com.gawdl3y.util.ModifiableValue;
 import info.gridworld.actor.Actor;
 import info.gridworld.grid.Grid;

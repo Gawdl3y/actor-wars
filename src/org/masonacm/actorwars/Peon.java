@@ -231,7 +231,7 @@ public abstract class Peon extends ActiveActor {
                     DynamicValue<Location> temp;
                     ((Peon) a).actions.add(0, Peon.conditionalAct(Utils.notAtLocation(a, target), Peon.moveToGradual(target)));
                     while(path.size() > 0) {
-                        temp = (path.size() > 1)? (new ModifiableValue<Location>(path.get(path.size()-2))):(a.getDynamicLocation());
+                        temp = path.size() > 1 ? new ModifiableValue<Location>(path.get(path.size() - 2)) : a.getDynamicLocation();
                         ((Peon) a).actions.add(0, Peon.conditionalAct(Utils.atLocation(a, temp), Action.move()));
                         ((Peon) a).actions.add(0, Action.turn(LocationFinder.dynamicDirectionTo(a.getDynamicLocation(), new ModifiableValue<Location>(path.get(path.size() - 1)))));
                         path.remove(path.size() - 1) ;
