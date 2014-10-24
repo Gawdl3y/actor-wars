@@ -5,11 +5,11 @@ package com.gawdl3y.util;
  * <p>Used so that references to instances are maintained when their value is changed</p>
  * @author Schuyler Cebulskie
  */
-public class ModifiableBoolean extends ModifiableValue<Boolean> {
+public class MutableBoolean extends Mutable<Boolean> {
     /**
      * Default constructor (value: false)
      */
-    public ModifiableBoolean() {
+    public MutableBoolean() {
         this.value = false;
     }
 
@@ -17,7 +17,7 @@ public class ModifiableBoolean extends ModifiableValue<Boolean> {
      * Fill constructor
      * @param value The value to use
      */
-    public ModifiableBoolean(Boolean value) {
+    public MutableBoolean(Boolean value) {
         this.value = value;
     }
 
@@ -25,7 +25,7 @@ public class ModifiableBoolean extends ModifiableValue<Boolean> {
      * Copy constructor
      * @param value The {@code DynamicValue} to copy from
      */
-    public ModifiableBoolean(DynamicValue<Boolean> value) {
+    public MutableBoolean(DynamicValue<Boolean> value) {
         this.value = value.getValue();
     }
 

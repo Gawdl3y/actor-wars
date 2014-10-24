@@ -5,22 +5,22 @@ package com.gawdl3y.util;
  * @param <T> The type of the value
  * @author Schuyler Cebulskie
  */
-public class ModifiableValue<T> extends DynamicValue<T> {
+public class Mutable<T> extends DynamicValue<T> {
     /**
-     * The value of the {@code ModifiableValue}
+     * The value of the {@code Mutable}
      */
     protected T value;
 
     /**
      * Default constructor
      */
-    public ModifiableValue() {}
+    public Mutable() {}
 
     /**
      * Fill constructor
      * @param value The value for the {@code DynamicValue}
      */
-    public ModifiableValue(T value) {
+    public Mutable(T value) {
         this.value = value;
     }
 
@@ -28,7 +28,7 @@ public class ModifiableValue<T> extends DynamicValue<T> {
      * Copy constructor
      * @param value The {@code DynamicValue} to copy from
      */
-    public ModifiableValue(DynamicValue<T> value) {
+    public Mutable(DynamicValue<T> value) {
         this.value = value.getValue();
     }
 

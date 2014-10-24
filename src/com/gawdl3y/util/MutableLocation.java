@@ -7,11 +7,11 @@ import info.gridworld.grid.Location;
  * <p>Used so that references to instances are maintained when their value is changed</p>
  * @author Schuyler Cebulskie
  */
-public class ModifiableLocation extends ModifiableValue<Location> {
+public class MutableLocation extends Mutable<Location> {
     /**
      * Default constructor (value: (0, 0))
      */
-    public ModifiableLocation() {
+    public MutableLocation() {
         this.value = new Location(0, 0);
     }
 
@@ -19,7 +19,7 @@ public class ModifiableLocation extends ModifiableValue<Location> {
      * Fill constructor
      * @param value The Location to use
      */
-    public ModifiableLocation(Location value) {
+    public MutableLocation(Location value) {
         this.value = value;
     }
 
@@ -28,7 +28,7 @@ public class ModifiableLocation extends ModifiableValue<Location> {
      * @param row The row of the Location to use
      * @param col The column of the Location to use
      */
-    public ModifiableLocation(int row, int col) {
+    public MutableLocation(int row, int col) {
         this.value = new Location(row, col);
     }
 
@@ -36,7 +36,7 @@ public class ModifiableLocation extends ModifiableValue<Location> {
      * Copy constructor
      * @param value The Location to use
      */
-    public ModifiableLocation(DynamicValue<Location> value) {
+    public MutableLocation(DynamicValue<Location> value) {
         this.value = new Location(value.getValue().getRow(), value.getValue().getCol());
     }
 

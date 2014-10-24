@@ -5,11 +5,11 @@ package com.gawdl3y.util;
  * <p>Used so that references to instances are maintained when their value is changed</p>
  * @author Schuyler Cebulskie
  */
-public class ModifiableInteger extends ModifiableValue<Integer> {
+public class MutableInteger extends Mutable<Integer> {
     /**
      * Default constructor (value: 0)
      */
-    public ModifiableInteger() {
+    public MutableInteger() {
         this.value = 0;
     }
 
@@ -17,15 +17,15 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * Fill constructor
      * @param value The value to use
      */
-    public ModifiableInteger(int value) {
+    public MutableInteger(int value) {
         this.value = value;
     }
 
     /**
      * Copy constructor
-     * @param value The ModifiableInteger to copy from
+     * @param value The MutableInteger to copy from
      */
-    public ModifiableInteger(ModifiableInteger value) {
+    public MutableInteger(MutableInteger value) {
         this.value = value.getValue();
     }
 
@@ -55,7 +55,7 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * Performs addition on this value
      * @param addend The value to add to this value
      */
-    public void add(ModifiableInteger addend) {
+    public void add(MutableInteger addend) {
         this.value += addend.getValue();
     }
 
@@ -71,7 +71,7 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * Performs subtraction on this value
      * @param subtrahend The value to subtract from this value
      */
-    public void subtract(ModifiableInteger subtrahend) {
+    public void subtract(MutableInteger subtrahend) {
         this.value -= subtrahend.getValue();
     }
 
@@ -87,7 +87,7 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * Performs multiplication on this value
      * @param factor The value to multiply this value by
      */
-    public void multiply(ModifiableInteger factor) {
+    public void multiply(MutableInteger factor) {
         this.value *= factor.getValue();
     }
 
@@ -103,7 +103,7 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * Performs division on this value
      * @param divisor The value to divide this value by
      */
-    public void divide(ModifiableInteger divisor) {
+    public void divide(MutableInteger divisor) {
         this.value /= divisor.getValue();
     }
 
@@ -114,8 +114,8 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * @param addend2 The second value
      * @return The result of the addition
      */
-    public static ModifiableInteger add(DynamicValue<Integer> addend1, DynamicValue<Integer> addend2) {
-        return new ModifiableInteger(addend1.getValue() + addend2.getValue());
+    public static MutableInteger add(DynamicValue<Integer> addend1, DynamicValue<Integer> addend2) {
+        return new MutableInteger(addend1.getValue() + addend2.getValue());
     }
 
     /**
@@ -124,8 +124,8 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * @param subtrahend The value to subtract by
      * @return The result of the subtraction
      */
-    public static ModifiableInteger subtract(DynamicValue<Integer> minuend, DynamicValue<Integer> subtrahend) {
-        return new ModifiableInteger(minuend.getValue() - subtrahend.getValue());
+    public static MutableInteger subtract(DynamicValue<Integer> minuend, DynamicValue<Integer> subtrahend) {
+        return new MutableInteger(minuend.getValue() - subtrahend.getValue());
     }
 
     /**
@@ -134,8 +134,8 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * @param factor2 The value to multiply by
      * @return The result of the multiplication
      */
-    public static ModifiableInteger multiply(DynamicValue<Integer> factor1, DynamicValue<Integer> factor2) {
-        return new ModifiableInteger(factor1.getValue() * factor2.getValue());
+    public static MutableInteger multiply(DynamicValue<Integer> factor1, DynamicValue<Integer> factor2) {
+        return new MutableInteger(factor1.getValue() * factor2.getValue());
     }
 
     /**
@@ -144,7 +144,7 @@ public class ModifiableInteger extends ModifiableValue<Integer> {
      * @param divisor  The value to divide by
      * @return The result of the division
      */
-    public static ModifiableInteger divide(DynamicValue<Integer> dividend, DynamicValue<Integer> divisor) {
-        return new ModifiableInteger(dividend.getValue() / divisor.getValue());
+    public static MutableInteger divide(DynamicValue<Integer> dividend, DynamicValue<Integer> divisor) {
+        return new MutableInteger(dividend.getValue() / divisor.getValue());
     }
 }
