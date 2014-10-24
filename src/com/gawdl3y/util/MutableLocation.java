@@ -3,7 +3,7 @@ package com.gawdl3y.util;
 import info.gridworld.grid.Location;
 
 /**
- * A simple wrapper class for an integer
+ * A simple wrapper class for a {@code Location}
  * <p>Used so that references to instances are maintained when their value is changed</p>
  * @author Schuyler Cebulskie
  */
